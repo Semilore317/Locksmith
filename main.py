@@ -55,5 +55,4 @@ file_menu = ctk.CTkOptionMenu(master=main_frame)
 action_menu = ctk.CTkOptionMenu(master=main_frame)
 
 root.mainloop()
-
 # this is a comment
