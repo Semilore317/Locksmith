@@ -1,3 +1,9 @@
+# TODO 1: add a functioning side bar
+# TOOD 2: add a functioning menu bar 
+# TODO 3 : add the main app GUI for creating custom fields for passwords
+# TODO 4: add the file handling logic to store the passwords
+# TODO 5: use cryptography module to store the credentials as hashes
+
 import tkinter as tk
 import customtkinter as ctk
 
@@ -17,13 +23,6 @@ root.resizable(width=False, height=False)
 frame = ctk.CTkFrame(master=root)
 frame.pack(padx=10, pady=10, fill="both", expand=True)
 
-# Welcome-label
-'''welcomeLabel = customtkinter.CTkLabel(master=frame, text="Welcome to Locksmith!", font=("Roboto", 40))
-welcomeLabel.pack(padx=10, pady=10, fill="both", expand=True)'''
-
-
-
-
 # Add content to the welcome screen
 welcome_label = ctk.CTkLabel(
     root, 
@@ -41,6 +40,7 @@ loading_label.pack(pady=10)
 
 # Schedule the screen to close after 3 seconds (3000 milliseconds)
 root.after(3000, close_welcome_screen)
+
 
 root.mainloop()
 
