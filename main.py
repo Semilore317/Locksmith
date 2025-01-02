@@ -1,41 +1,46 @@
-import zipfile
 import tkinter as tk
-import customtkinter
+import customtkinter as ctk
+
+# functions
+def close_welcome_screen():
+    root.destroy()  # Closes the welcome screen
 
 # Basic theming
-customtkinter.set_appearance_mode("system")
-customtkinter.set_default_color_theme("dark-blue")
+ctk.set_appearance_mode("system")
+ctk.set_default_color_theme("dark-blue")
 
-root = customtkinter.CTk()
-root.geometry("600x600")
+root = ctk.CTk()
+root.geometry("700x480")
 root.title("Locksmith")
 root.resizable(width=False, height=False)
 
-frame = customtkinter.CTkFrame(master=root)
+frame = ctk.CTkFrame(master=root)
 frame.pack(padx=10, pady=10, fill="both", expand=True)
 
 # Welcome-label
-welcomeLabel = customtkinter.CTkLabel(master=frame, text="Welcome to Locksmith", font=("Roboto", 40))
-welcomeLabel.pack(padx=10, pady=10, fill="both", expand=True)
+'''welcomeLabel = customtkinter.CTkLabel(master=frame, text="Welcome to Locksmith!", font=("Roboto", 40))
+welcomeLabel.pack(padx=10, pady=10, fill="both", expand=True)'''
 
-'''# Select Operation Label
-selectionLabel = customtkinter.CTkLabel(master=frame, text="Select Operation", font=("Roboto", 20))
-selectionLabel.pack(padx=10, pady=10, fill="both", expand=True)
 
-# Create a multi-stage app with buttons
-buttonFrame = customtkinter.CTkFrame(master=frame)
-buttonFrame.pack(padx=10, pady=10, fill="both", expand=True)
 
-# Inner frame to center the buttons
-innerButtonFrame = customtkinter.CTkFrame(master=buttonFrame)
-innerButtonFrame.pack(expand=True)
 
-# Buttons for "Zip" and "Unzip"
-zipButton = customtkinter.CTkButton(master=innerButtonFrame, text="Zip", font=("Roboto", 20))
-zipButton.grid(row=0, column=0, padx=10, pady=10)
+# Add content to the welcome screen
+welcome_label = ctk.CTkLabel(
+    root, 
+    text="Welcome to My Application", 
+    font=ctk.CTkFont("Arial", size=24, weight="bold")
+)
+welcome_label.pack(pady=100)
 
-unzipButton = customtkinter.CTkButton(master=innerButtonFrame, text="Unzip", font=("Roboto", 20))
-unzipButton.grid(row=0, column=1, padx=10, pady=10)'''
+loading_label = ctk.CTkLabel(
+    root, 
+    text="Loading, please wait...", 
+    font=ctk.CTkFont("Arial", size=16, weight="normal")
+)
+loading_label.pack(pady=10)
+
+# Schedule the screen to close after 3 seconds (3000 milliseconds)
+root.after(3000, close_welcome_screen)
 
 root.mainloop()
 
