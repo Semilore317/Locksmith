@@ -21,7 +21,7 @@ ctk.set_appearance_mode("system")
 ctk.set_default_color_theme("dark-blue")
 
 root = ctk.CTk()
-root.geometry("900x480")
+root.geometry("950x480")
 root.title("Locksmith")
 root.resizable(width=False, height=False)
 
@@ -50,7 +50,12 @@ root.after(3000, close_welcome_screen)
 # main app frame after welcome screen
 main_frame = ctk.CTkFrame(master=root, width=900, height=400)
 main_frame.grid_rowconfigure(0, weight=1)
+main_frame.grid_rowconfigure(1, weight=15)
 main_frame.grid_columnconfigure((0, 1, 2), weight=1)
+
+# search bar
+search_bar = ctk.CTkEntry(master=main_frame, placeholder_text="Search", width=300)
+search_bar.grid(row=0, column=0, columnspan=3 , padx=10, pady=10)
 
 # menu bar
 menu_bar = ctk.CTkOptionMenu(master=main_frame)
@@ -63,9 +68,9 @@ subframe_middle = ctk.CTkFrame(master=main_frame, corner_radius=10)
 subframe_right = ctk.CTkFrame(master=main_frame, corner_radius=10)
 
 # place subframes side by side
-subframe_left.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
-subframe_middle.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
-subframe_right.grid(row=0, column=2, padx=5, pady=5, sticky="nsew")
+subframe_left.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
+subframe_middle.grid(row=1, column=1, padx=5, pady=5, sticky="nsew")
+subframe_right.grid(row=1, column=2, padx=5, pady=5, sticky="nsew")
 
 # add labels to each subframe
 label1 = ctk.CTkLabel(master=subframe_left, text="Left Frame", corner_radius=10)
