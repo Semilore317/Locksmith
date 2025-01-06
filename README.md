@@ -16,3 +16,6 @@ A custom password manager app made entirely in Python
 ![View 3](image-2.png)
 
 ![View 4](image-3.png)
+
+# Attribution
+attribution: https://www.flaticon.com/free-icons/security" Security icons by flaticon.com
