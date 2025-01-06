@@ -4,7 +4,7 @@
 # TODO 4: add the file handling logic to store the passwords
 # TODO 5: use cryptography module to store the credentials as hashes
 
-#import tkinter as tk
+from tkinter import PhotoImage
 import customtkinter as ctk
 
 # functions
@@ -14,7 +14,7 @@ def close_welcome_label():
 def close_welcome_screen():
     welcome_label.destroy()  # Closes the welcome screen
     main_frame.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")  # Show main frame
-    root.after(1500, close_welcome_label)
+    root.after(10, close_welcome_label)
 
 # Basic theming
 ctk.set_appearance_mode("system")
@@ -23,7 +23,10 @@ ctk.set_default_color_theme("dark-blue")
 root = ctk.CTk()
 root.geometry("950x480")
 root.title("Locksmith")
-root.resizable(width=False, height=False)
+#root.resizable(width=False, height=False)
+
+icon = PhotoImage(file="./shield.png")
+root.wm_iconphoto(True, icon)
 
 # Configure root grid to support main_frame resizing
 root.grid_rowconfigure(0, weight=1)
@@ -83,4 +86,5 @@ label3 = ctk.CTkLabel(master=subframe_right, text="Right Frame", corner_radius=1
 label3.pack(padx=10, pady=10)
 
 root.mainloop()
-# this is a comment
+
+#attribution: https://www.flaticon.com/free-icons/security" Security icons by flaticon.com
