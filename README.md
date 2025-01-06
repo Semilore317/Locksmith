@@ -15,4 +15,4 @@ A custom password manager app made entirely in Python
 
 ![View 3](image-2.png)
 
-![View 4]](image-3.png)
+![View 4](image-3.png)
