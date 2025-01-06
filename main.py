@@ -30,7 +30,7 @@ root.wm_iconphoto(True, icon)
 
 # Configure root grid to support main_frame resizing
 root.grid_rowconfigure(0, weight=1)
-root.grid_columnconfigure(0, weight=1)
+root.grid_columnconfigure(0, weight=2)
 
 # Add content to the welcome screen
 welcome_label = ctk.CTkLabel(
@@ -54,7 +54,8 @@ root.after(3000, close_welcome_screen)
 main_frame = ctk.CTkFrame(master=root, width=900, height=400)
 main_frame.grid_rowconfigure(0, weight=1)
 main_frame.grid_rowconfigure(1, weight=15)
-main_frame.grid_columnconfigure((0, 1, 2), weight=1)
+main_frame.grid_columnconfigure(0, weight=1)
+main_frame.grid_columnconfigure((1,2), weight=2)
 
 # search bar
 search_bar = ctk.CTkEntry(master=main_frame, placeholder_text="Search", width=300)
