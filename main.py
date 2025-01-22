@@ -1,91 +1,71 @@
-# TODO 1: add a functioning side bar
-# TODO 2: add a functioning menu bar
-# TODO 3 : add the main app GUI for creating custom fields for passwords
-# TODO 4: add the file handling logic to store the passwords
-# TODO 5: use cryptography module to store the credentials as hashes
-
 from tkinter import PhotoImage
-import customtkinter as ctk
+import customtkinter
+from components.header_frame import HeaderFrame
+from components.sidebar_frame import SidebarFrame
+from PIL import Image
 
-# functions
-def close_welcome_label():
-    loading_label.destroy()
+customtkinter.set_appearance_mode("dark")
+# customtkinter.set_default_color_theme("dark-blue")
 
-def close_welcome_screen():
-    welcome_label.destroy()  # Closes the welcome screen
-    main_frame.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")  # Show main frame
-    root.after(10, close_welcome_label)
 
-# Basic theming
-ctk.set_appearance_mode("system")
-ctk.set_default_color_theme("dark-blue")
+class App(customtkinter.CTk):
+    def __init__(self):
+        super().__init__()
 
-root = ctk.CTk()
-root.geometry("950x480")
-root.title("Locksmith")
-#root.resizable(width=False, height=False)
+        self.title("Locksmith Password Manager")
+        self.minsize(900, 500)
 
-icon = PhotoImage(file="./shield.png")
-root.wm_iconphoto(True, icon)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
 
-# Configure root grid to support main_frame resizing
-root.grid_rowconfigure(0, weight=1)
-root.grid_columnconfigure(0, weight=2)
+        # Set the app's icon
+        icon = PhotoImage(file="./assets/app_icon.png")
+        self.wm_iconphoto(True, icon)
 
-# Add content to the welcome screen
-welcome_label = ctk.CTkLabel(
-    root, 
-    text="Welcome to Locksmith!", 
-    font=ctk.CTkFont("Arial", size=24, weight="bold")
-)
-welcome_label.grid(row=0, column=0, pady=100)  # Use grid instead of pack()
+        # header
+        self.header_frame = HeaderFrame(self, fg_color="#222222")
+        self.header_frame.grid(row=0, column=0, sticky="ew")
 
-loading_label = ctk.CTkLabel(
-    root, 
-    text="Loading, please wait...", 
-    font=ctk.CTkFont("Arial", size=16, weight="normal")
-)
-loading_label.grid(row=1, column=0, pady=10)  # Use grid instead of pack()
+        # Body
+        self.body_frame = customtkinter.CTkFrame(self, border_width=2)
+        self.body_frame.grid(row=1, column=0, sticky="nsew")
+        self.body_frame.grid_columnconfigure(0, weight=1)
+        self.body_frame.grid_columnconfigure((1, 2), weight=3)
+        self.body_frame.grid_rowconfigure(0, weight=1)
 
-# Schedule the screen to close after 3 seconds (3000 milliseconds)
-root.after(3000, close_welcome_screen)
+        # Sidebar
+        self.sidebar_frame = SidebarFrame(self.body_frame, fg_color="#222222")
+        self.sidebar_frame.grid_columnconfigure(0, weight=1)
+        self.sidebar_frame.grid(
+            row=0,
+            column=0,
+            sticky="nsew",
+        )
+        
+        # Sidebar - Icon and Title
+        icon_and_title_frame = customtkinter.CTkFrame(
+            self.sidebar_frame, fg_color="transparent"
+        )
+        lock_image = customtkinter.CTkImage(
+            light_image=Image.open("./assets/app_icon.png"),
+            dark_image=Image.open("./assets/app_icon.png"),
+            size=(48, 48),
+        )
+        image_label = customtkinter.CTkLabel(
+            icon_and_title_frame, image=lock_image, text=""
+        )
+        title = customtkinter.CTkLabel(
+            icon_and_title_frame,
+            text="Locksmith\nPassword Manager",
+            justify="left",
+            font=customtkinter.CTkFont(family="Inter", size=18, weight="bold"),
+        )
+        icon_and_title_frame.grid(row=0, column=0)
+        image_label.grid(row=0, column=0, pady=8)
+        title.grid(row=0, column=1)
 
-# main app frame after welcome screen
-main_frame = ctk.CTkFrame(master=root, width=900, height=400)
-main_frame.grid_rowconfigure(0, weight=1)
-main_frame.grid_rowconfigure(1, weight=15)
-main_frame.grid_columnconfigure(0, weight=1)
-main_frame.grid_columnconfigure((1,2), weight=2)
 
-# search bar
-search_bar = ctk.CTkEntry(master=main_frame, placeholder_text="Search", width=300)
-search_bar.grid(row=0, column=0, columnspan=3 , padx=10, pady=10)
+app = App()
+app.mainloop()
 
-# menu bar
-menu_bar = ctk.CTkOptionMenu(master=main_frame)
-file_menu = ctk.CTkOptionMenu(master=main_frame)
-action_menu = ctk.CTkOptionMenu(master=main_frame)
-
-# subframes
-subframe_left = ctk.CTkFrame(master=main_frame, corner_radius=10)
-subframe_middle = ctk.CTkFrame(master=main_frame, corner_radius=10)
-subframe_right = ctk.CTkFrame(master=main_frame, corner_radius=10)
-
-# place subframes side by side
-subframe_left.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
-subframe_middle.grid(row=1, column=1, padx=5, pady=5, sticky="nsew")
-subframe_right.grid(row=1, column=2, padx=5, pady=5, sticky="nsew")
-
-# add labels to each subframe
-label1 = ctk.CTkLabel(master=subframe_left, text="Left Frame", corner_radius=10)
-label1.pack(padx=10, pady=10)
-
-label2 = ctk.CTkLabel(master=subframe_middle, text="Middle Frame", corner_radius=10)
-label2.pack(padx=10, pady=10)
-
-label3 = ctk.CTkLabel(master=subframe_right, text="Right Frame", corner_radius=10)
-label3.pack(padx=10, pady=10)
-
-root.mainloop()
-
-#attribution: https://www.flaticon.com/free-icons/security" Security icons by flaticon.com
+# Got icon from https://icons8.com/icon/15437/lock
