@@ -15,14 +15,18 @@ class App(ctk.CTk):
         self.title("Locksmith Password Manager")
         self.minsize(900, 500)
 
+        # Configure grid for resizing
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
         # Set the app's icon
-        icon = PhotoImage(file="./assets/app_icon.png")
-        self.wm_iconphoto(True, icon)
+        try:
+            icon = PhotoImage(file="./assets/app_icon.png")
+            self.wm_iconphoto(True, icon)
+        except Exception as e:
+            print(f"Error loading icon: {e}")
 
-        # header
+        # Header
         self.header_frame = HeaderFrame(self, fg_color="#222222")
         self.header_frame.grid(row=0, column=0, sticky="ew")
 
@@ -36,36 +40,33 @@ class App(ctk.CTk):
         # Sidebar
         self.sidebar_frame = SidebarFrame(self.body_frame, fg_color="#222222")
         self.sidebar_frame.grid_columnconfigure(0, weight=1)
-        self.sidebar_frame.grid(
-            row=0,
-            column=0,
-            sticky="nsew",
-        )
-        
+        self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
+
         # Sidebar - Icon and Title
         icon_and_title_frame = ctk.CTkFrame(
             self.sidebar_frame, fg_color="transparent"
         )
-        lock_image = ctk.CTkImage(
-            light_image=Image.open("./assets/app_icon.png"),
-            dark_image=Image.open("./assets/app_icon.png"),
-            size=(48, 48),
-        )
-        image_label = ctk.CTkLabel(
-            icon_and_title_frame, image=lock_image, text=""
-        )
+        try:
+            lock_image = ctk.CTkImage(
+                light_image=Image.open("./assets/app_icon.png"),
+                dark_image=Image.open("./assets/app_icon.png"),
+                size=(48, 48),
+            )
+        except Exception as e:
+            print(f"Error loading lock image: {e}")
+            lock_image = None
+
+        image_label = ctk.CTkLabel(icon_and_title_frame, image=lock_image, text="")
         title = ctk.CTkLabel(
             icon_and_title_frame,
             text="Locksmith\nPassword Manager",
             justify="left",
-            font=ctk.CTkFont(family="Inter", size=18, weight="bold"),
+            font=ctk.CTkFont(family="Arial", size=18, weight="bold"),  # Replaced with a common font
         )
-        icon_and_title_frame.grid(row=0, column=0)
-        image_label.grid(row=0, column=0, pady=8)
-        title.grid(row=0, column=1)
+        icon_and_title_frame.grid(row=0, column=0, sticky="ew", pady=8)
+        image_label.grid(row=0, column=0, pady=8, padx=8)
+        title.grid(row=0, column=1, sticky="w")
 
 
 app = App()
 app.mainloop()
-
-# Got icon from https://icons8.com/icon/15437/lock
