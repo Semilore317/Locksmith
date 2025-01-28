@@ -1,11 +1,11 @@
-import customtkinter
+import customtkinter as ctk
 
-class HeaderFrame(customtkinter.CTkFrame):
+class HeaderFrame(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
         self.grid_columnconfigure(0, weight=1)
-        search_bar = customtkinter.CTkEntry(
+        search_bar = ctk.CTkEntry(
             master=self,
             placeholder_text="Search by Username or Website",
             width=600,

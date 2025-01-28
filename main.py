@@ -1,14 +1,14 @@
 from tkinter import PhotoImage
-import customtkinter
+import customtkinter as ctk
 from components.header_frame import HeaderFrame
 from components.sidebar_frame import SidebarFrame
 from PIL import Image
 
-customtkinter.set_appearance_mode("dark")
-# customtkinter.set_default_color_theme("dark-blue")
+ctk.set_appearance_mode("dark")
+# ctk.set_default_color_theme("dark-blue")
 
 
-class App(customtkinter.CTk):
+class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
@@ -27,7 +27,7 @@ class App(customtkinter.CTk):
         self.header_frame.grid(row=0, column=0, sticky="ew")
 
         # Body
-        self.body_frame = customtkinter.CTkFrame(self, border_width=2)
+        self.body_frame = ctk.CTkFrame(self, border_width=2)
         self.body_frame.grid(row=1, column=0, sticky="nsew")
         self.body_frame.grid_columnconfigure(0, weight=1)
         self.body_frame.grid_columnconfigure((1, 2), weight=3)
@@ -43,22 +43,22 @@ class App(customtkinter.CTk):
         )
         
         # Sidebar - Icon and Title
-        icon_and_title_frame = customtkinter.CTkFrame(
+        icon_and_title_frame = ctk.CTkFrame(
             self.sidebar_frame, fg_color="transparent"
         )
-        lock_image = customtkinter.CTkImage(
+        lock_image = ctk.CTkImage(
             light_image=Image.open("./assets/app_icon.png"),
             dark_image=Image.open("./assets/app_icon.png"),
             size=(48, 48),
         )
-        image_label = customtkinter.CTkLabel(
+        image_label = ctk.CTkLabel(
             icon_and_title_frame, image=lock_image, text=""
         )
-        title = customtkinter.CTkLabel(
+        title = ctk.CTkLabel(
             icon_and_title_frame,
             text="Locksmith\nPassword Manager",
             justify="left",
-            font=customtkinter.CTkFont(family="Inter", size=18, weight="bold"),
+            font=ctk.CTkFont(family="Inter", size=18, weight="bold"),
         )
         icon_and_title_frame.grid(row=0, column=0)
         image_label.grid(row=0, column=0, pady=8)
