@@ -3,7 +3,7 @@ import customtkinter as ctk
 from components.frames.header_frame import HeaderFrame
 from components.frames.sidebar_frame import SidebarFrame
 from components.frames.items_frame import ItemsFrame
-from components.frames.cur_frame import CURFrame
+from components.frames.cru_frame import CRUFrame
 from PIL import Image
 
 ctk.set_appearance_mode("dark")
@@ -39,9 +39,23 @@ class App(ctk.CTk):
         self.body_frame.grid_columnconfigure((1, 2), weight=3)
         self.body_frame.grid_rowconfigure(0, weight=1)
 
+        # Items Frame
+        self.items_frame = ItemsFrame(self.body_frame, fg_color="#2F2F2F")
+        self.items_frame.grid(row=0, column=1, sticky="nsew")
+
+        # CRU (Create, Read, Update) Frame
+        self.cru_frame = CRUFrame(self.body_frame, fg_color="#464646")
+        self.cru_frame.grid(row=0, column=2, sticky="nsew")
+
         # Sidebar
         self.sidebar_frame = SidebarFrame(
-            self.body_frame, fg_color="#222222", width=180
+            self.body_frame,
+            fg_color="#222222",
+            width=180,
+            controllers={
+                "show_all_items": self.items_frame.show_all_items,
+                "show_bin_items": self.items_frame.show_bin_items,
+            },
         )
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
 
@@ -80,14 +94,6 @@ class App(ctk.CTk):
             column=1,
             padx=8,
         )
-
-        # Items Frame
-        self.items_frame = ItemsFrame(self.body_frame, fg_color="#2F2F2F")
-        self.items_frame.grid(row=0, column=1, sticky="nsew")
-
-        # CUR Frame
-        self.cur_frame = CURFrame(self.body_frame, fg_color="#464646")
-        self.cur_frame.grid(row=0, column=2, sticky="nsew")
 
 
 app = App()
