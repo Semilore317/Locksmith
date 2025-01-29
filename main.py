@@ -34,12 +34,11 @@ class App(ctk.CTk):
         # Body
         self.body_frame = ctk.CTkFrame(self, border_width=2)
         self.body_frame.grid(row=1, column=0, sticky="nsew")
-        self.body_frame.grid_columnconfigure(0, weight=1)
         self.body_frame.grid_columnconfigure((1, 2), weight=3)
         self.body_frame.grid_rowconfigure(0, weight=1)
 
         # Sidebar
-        self.sidebar_frame = SidebarFrame(self.body_frame, fg_color="#222222")
+        self.sidebar_frame = SidebarFrame(self.body_frame, fg_color="#222222", width=180)
         self.sidebar_frame.grid_columnconfigure(0, weight=1)
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
 
