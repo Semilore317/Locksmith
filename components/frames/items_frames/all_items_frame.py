@@ -23,7 +23,7 @@ class AllItemsFrame(ctk.CTkFrame):
             no_items_label = ctk.CTkLabel(
                 self,
                 text="NO ITEMS",
-                font=ctk.CTkFont(family="Arial", size=48, weight="bold"),
+                font=ctk.CTkFont(family="Arial", size=36, weight="bold"),
             )
             no_items_label.grid(row=1, column=0, sticky="ew", pady=(240, 0))
             desc_label = ctk.CTkLabel(
