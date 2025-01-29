@@ -67,7 +67,7 @@ class SidebarFrame(ctk.CTkFrame):
         all_items_button.grid(row=1, column=0, pady=(30, 10))
         bin_button.grid(row=2, column=0, pady=(20, 10), padx=15)
 
-        types_label.grid(row=3, column=0, pady=(30, 20), padx=15, sticky="w")
+        types_label.grid(row=3, column=0, pady=(50, 20), padx=15, sticky="w")
 
         login_button.grid(row=4, column=0, pady=(10, 10), padx=15)
         secure_note_button.grid(row=5, column=0, pady=(10, 20), padx=15)
