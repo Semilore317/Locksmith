@@ -41,7 +41,6 @@ class App(ctk.CTk):
         self.sidebar_frame = SidebarFrame(
             self.body_frame, fg_color="#222222", width=180
         )
-        self.sidebar_frame.grid_columnconfigure(0, weight=1)
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
 
         # Sidebar - Icon and Title
