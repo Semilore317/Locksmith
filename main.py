@@ -3,7 +3,7 @@ import customtkinter as ctk
 from components.frames.header_frame import HeaderFrame
 from components.frames.sidebar_frame import SidebarFrame
 from components.frames.items_frame import ItemsFrame
-from components.frames.cud_frame import CUDFrame
+from components.frames.cur_frame import CURFrame
 from PIL import Image
 
 ctk.set_appearance_mode("dark")
@@ -85,9 +85,9 @@ class App(ctk.CTk):
         self.items_frame = ItemsFrame(self.body_frame, fg_color="#2F2F2F")
         self.items_frame.grid(row=0, column=1, sticky="nsew")
 
-        # CUD Frame
-        self.cud_frame = CUDFrame(self.body_frame, fg_color="#464646")
-        self.cud_frame.grid(row=0, column=2, sticky="nsew")
+        # CUR Frame
+        self.cur_frame = CURFrame(self.body_frame, fg_color="#464646")
+        self.cur_frame.grid(row=0, column=2, sticky="nsew")
 
 
 app = App()
