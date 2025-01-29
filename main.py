@@ -38,14 +38,14 @@ class App(ctk.CTk):
         self.body_frame.grid_rowconfigure(0, weight=1)
 
         # Sidebar
-        self.sidebar_frame = SidebarFrame(self.body_frame, fg_color="#222222", width=180)
+        self.sidebar_frame = SidebarFrame(
+            self.body_frame, fg_color="#222222", width=180
+        )
         self.sidebar_frame.grid_columnconfigure(0, weight=1)
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
 
         # Sidebar - Icon and Title
-        icon_and_title_frame = ctk.CTkFrame(
-            self.sidebar_frame, fg_color="transparent"
-        )
+        icon_and_title_frame = ctk.CTkFrame(self.sidebar_frame, fg_color="transparent")
         try:
             lock_image = ctk.CTkImage(
                 light_image=Image.open("./assets/app_icon.png"),
@@ -67,12 +67,19 @@ class App(ctk.CTk):
 
         # Layout the frame and ensure the icon and text are in the same row and next to each other
         icon_and_title_frame.grid(row=0, column=0, pady=8)
-        icon_and_title_frame.grid_columnconfigure(0, weight=0)  # Prevent stretching of the columns
-        icon_and_title_frame.grid_columnconfigure(1, weight=1)  # Let the text column take remaining space
+        # Prevent stretching of the columns
+        icon_and_title_frame.grid_columnconfigure(0, weight=0)
+        # Let the text column take remaining space
+        icon_and_title_frame.grid_columnconfigure(1, weight=1)
 
         # Place image and text next to each other
         image_label.grid(row=0, column=0, padx=8)
-        title.grid(row=0, column=1, padx=8,)  # Title text next to the image
+        title.grid(
+            row=0,
+            column=1,
+            padx=8,
+        )
+
 
 app = App()
 app.mainloop()
