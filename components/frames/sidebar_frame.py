@@ -46,7 +46,7 @@ class SidebarFrame(ctk.CTkFrame):
         # Login Button
         login_button = Button(
             self,
-            text="Login",
+            text="Logins",
             width=self.BUTTON_WIDTH,
             height=self.BUTTON_HEIGHT,
             corner_radius=self.BUTTON_CORNER_RADIUS,
@@ -56,7 +56,7 @@ class SidebarFrame(ctk.CTkFrame):
         # Secure Note Button
         secure_note_button = Button(
             self,
-            text="Secure Note",
+            text="Secure Notes",
             width=self.BUTTON_WIDTH,
             height=self.BUTTON_HEIGHT,
             corner_radius=self.BUTTON_CORNER_RADIUS,
