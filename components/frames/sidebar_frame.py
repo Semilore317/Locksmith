@@ -3,7 +3,7 @@ from components.buttons.button import Button
 
 
 class SidebarFrame(ctk.CTkFrame):
-    def __init__(self, master, **kwargs):
+    def __init__(self, master, controllers, **kwargs):
         super().__init__(master, **kwargs)
 
         # Define some constants for the sidebar components
@@ -22,6 +22,7 @@ class SidebarFrame(ctk.CTkFrame):
             corner_radius=self.BUTTON_CORNER_RADIUS,
             text="All Items",
             font=button_font,
+            command=controllers["show_all_items"],
         )
 
         # Bin Button
@@ -32,6 +33,7 @@ class SidebarFrame(ctk.CTkFrame):
             height=self.BUTTON_HEIGHT,
             corner_radius=self.BUTTON_CORNER_RADIUS,
             font=button_font,
+            command=controllers["show_bin_items"],
         )
 
         # Section Label ("Types")
