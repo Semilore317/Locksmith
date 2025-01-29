@@ -1,33 +1,37 @@
 from tkinter import PhotoImage
-import customtkinter
+import customtkinter as ctk
 from components.header_frame import HeaderFrame
 from components.sidebar_frame import SidebarFrame
 from PIL import Image
 
-customtkinter.set_appearance_mode("dark")
-# customtkinter.set_default_color_theme("dark-blue")
+ctk.set_appearance_mode("dark")
+# ctk.set_default_color_theme("dark-blue")
 
 
-class App(customtkinter.CTk):
+class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
         self.title("Locksmith Password Manager")
         self.minsize(900, 500)
 
+        # Configure grid for resizing
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
         # Set the app's icon
-        icon = PhotoImage(file="./assets/app_icon.png")
-        self.wm_iconphoto(True, icon)
+        try:
+            icon = PhotoImage(file="./assets/app_icon.png")
+            self.wm_iconphoto(True, icon)
+        except Exception as e:
+            print(f"Error loading icon: {e}")
 
-        # header
+        # Header
         self.header_frame = HeaderFrame(self, fg_color="#222222")
         self.header_frame.grid(row=0, column=0, sticky="ew")
 
         # Body
-        self.body_frame = customtkinter.CTkFrame(self, border_width=2)
+        self.body_frame = ctk.CTkFrame(self, border_width=2)
         self.body_frame.grid(row=1, column=0, sticky="nsew")
         self.body_frame.grid_columnconfigure(0, weight=1)
         self.body_frame.grid_columnconfigure((1, 2), weight=3)
@@ -36,36 +40,39 @@ class App(customtkinter.CTk):
         # Sidebar
         self.sidebar_frame = SidebarFrame(self.body_frame, fg_color="#222222")
         self.sidebar_frame.grid_columnconfigure(0, weight=1)
-        self.sidebar_frame.grid(
-            row=0,
-            column=0,
-            sticky="nsew",
-        )
-        
+        self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
+
         # Sidebar - Icon and Title
-        icon_and_title_frame = customtkinter.CTkFrame(
+        icon_and_title_frame = ctk.CTkFrame(
             self.sidebar_frame, fg_color="transparent"
         )
-        lock_image = customtkinter.CTkImage(
-            light_image=Image.open("./assets/app_icon.png"),
-            dark_image=Image.open("./assets/app_icon.png"),
-            size=(48, 48),
-        )
-        image_label = customtkinter.CTkLabel(
-            icon_and_title_frame, image=lock_image, text=""
-        )
-        title = customtkinter.CTkLabel(
+        try:
+            lock_image = ctk.CTkImage(
+                light_image=Image.open("./assets/app_icon.png"),
+                dark_image=Image.open("./assets/app_icon.png"),
+                size=(48, 48),
+            )
+        except Exception as e:
+            print(f"Error loading lock image: {e}")
+            lock_image = None
+
+        # Create image and title labels
+        image_label = ctk.CTkLabel(icon_and_title_frame, image=lock_image, text="")
+        title = ctk.CTkLabel(
             icon_and_title_frame,
             text="Locksmith\nPassword Manager",
             justify="left",
-            font=customtkinter.CTkFont(family="Inter", size=18, weight="bold"),
+            font=ctk.CTkFont(family="Arial", size=18, weight="bold"),
         )
-        icon_and_title_frame.grid(row=0, column=0)
-        image_label.grid(row=0, column=0, pady=8)
-        title.grid(row=0, column=1)
 
+        # Layout the frame and ensure the icon and text are in the same row and next to each other
+        icon_and_title_frame.grid(row=0, column=0, pady=8)
+        icon_and_title_frame.grid_columnconfigure(0, weight=0)  # Prevent stretching of the columns
+        icon_and_title_frame.grid_columnconfigure(1, weight=1)  # Let the text column take remaining space
+
+        # Place image and text next to each other
+        image_label.grid(row=0, column=0, padx=8)
+        title.grid(row=0, column=1, padx=8,)  # Title text next to the image
 
 app = App()
 app.mainloop()
-
-# Got icon from https://icons8.com/icon/15437/lock
