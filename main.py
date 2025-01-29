@@ -5,7 +5,6 @@ from components.sidebar_frame import SidebarFrame
 from PIL import Image
 
 ctk.set_appearance_mode("dark")
-# ctk.set_default_color_theme("dark-blue")
 
 
 class App(ctk.CTk):
@@ -13,7 +12,9 @@ class App(ctk.CTk):
         super().__init__()
 
         self.title("Locksmith Password Manager")
-        self.minsize(900, 500)
+        # Set a fixed window size since scaling widgets in Tkinter is a pain to handle
+        self.geometry("1340x710")
+        self.resizable(False, False)
 
         # Configure grid for resizing
         self.grid_columnconfigure(0, weight=1)
