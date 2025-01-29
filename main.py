@@ -1,7 +1,7 @@
 from tkinter import PhotoImage
 import customtkinter as ctk
-from components.header_frame import HeaderFrame
-from components.sidebar_frame import SidebarFrame
+from components.frames.header_frame import HeaderFrame
+from components.frames.sidebar_frame import SidebarFrame
 from PIL import Image
 
 ctk.set_appearance_mode("dark")
