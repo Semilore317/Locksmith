@@ -1,6 +1,3 @@
-from inspect import indentsize
-from textwrap import indent
-
 import customtkinter as ctk
 
 class SidebarFrame(ctk.CTkFrame):
