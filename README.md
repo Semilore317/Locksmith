@@ -7,15 +7,9 @@ A custom password manager app made entirely in Python
 3. Ace CSC 103 😗
 
 
-# Figma UI designs
+## [Figma Mockup](https://www.figma.com/design/wwjDXE2IXjUALQl4LI0CA7/Locksmith---Password-Manager?node-id=0-1&t=jjM42Woqbcefx2dr-1)
 #### (not to be strictly followed!, just a yardstick)
-![View 1](image.png)
 
-![View 2](image-1.png)
-
-![View 3](image-2.png)
-
-![View 4](image-3.png)
 
 # Attribution
 attribution: https://www.flaticon.com/free-icons/security" Security icons by flaticon.com
