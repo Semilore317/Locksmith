@@ -79,7 +79,7 @@ class AddItemsFrame(ctk.CTkFrame):
         )
         self.add_login_form_frame.grid_columnconfigure(0, weight=1)
 
-        name_input_field = InputField(
+        credentials_name_input_field = InputField(
             self.add_login_form_frame,
             "Name",
             text_var=self.form_data["login"]["name"],
@@ -97,7 +97,7 @@ class AddItemsFrame(ctk.CTkFrame):
             text_var=self.form_data["login"]["password"],
         )
 
-        save_button = Button(
+        save_credentials_button = Button(
             self.add_login_form_frame,
             text="Save",
             corner_radius=2,
@@ -109,10 +109,46 @@ class AddItemsFrame(ctk.CTkFrame):
         self.add_login_form_frame.grid(
             row=2, column=0, sticky="ew", padx=32, pady=(0, 16)
         )
-        name_input_field.grid(row=0, column=0, sticky="ew", padx=6, pady=4)
+        credentials_name_input_field.grid(row=0, column=0, sticky="ew", padx=6, pady=4)
         username_input_field.grid(row=1, column=0, sticky="ew", padx=6, pady=4)
         password_input_field.grid(row=2, column=0, sticky="ew", padx=6, pady=4)
-        save_button.grid(row=3, column=0, sticky="ew", padx=6, pady=6)
+        save_credentials_button.grid(row=3, column=0, sticky="ew", padx=6, pady=6)
+        # --------------------------------------------------------------------------
+
+        # ----------------- Secure Note Form
+        self.add_note_form_frame = ctk.CTkFrame(
+            self, fg_color="#B6B6B6", corner_radius=2
+        )
+        self.add_note_form_frame.grid_columnconfigure(0, weight=1)
+
+        note_name_input_field = InputField(
+            self.add_note_form_frame,
+            label="Name",
+            text_var=self.form_data["note"]["name"],
+        )
+
+        content_input_field = InputField(
+            self.add_note_form_frame,
+            label="Content",
+            text_var=self.form_data["note"]["content"],
+        )
+
+        save_note_button = Button(
+            self.add_note_form_frame,
+            text="Save",
+            corner_radius=2,
+            font=ctk.CTkFont(family="Inter", size=16),
+            height=45,
+        )
+
+        # Secure Note Form Grid Placement
+        self.add_note_form_frame.grid(
+            row=2, column=0, sticky="ew", padx=32, pady=(0, 16)
+        )
+        note_name_input_field.grid(row=0, column=0, sticky="ew", padx=6, pady=4)
+        content_input_field.grid(row=1, column=0, sticky="ew", padx=6, pady=4)
+        save_note_button.grid(row=2, column=0, sticky="ew", padx=6, pady=6)
+        # --------------------------------------------------------------------------
 
     def on_item_type_change(self, choice):
         item_type = choice.lower().replace(" ", "_")
