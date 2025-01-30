@@ -1,5 +1,6 @@
 import customtkinter as ctk
 
+from components.buttons.button import Button
 from components.frames.cur_frames.components.input_field import InputField
 
 
@@ -96,13 +97,22 @@ class AddItemsFrame(ctk.CTkFrame):
             text_var=self.form_data["login"]["password"],
         )
 
+        save_button = Button(
+            self.add_login_form_frame,
+            text="Save",
+            corner_radius=2,
+            font=ctk.CTkFont(family="Inter", size=16),
+            height=40,
+        )
+
         # Login Credentials Form Grid Placement
         self.add_login_form_frame.grid(
             row=2, column=0, sticky="ew", padx=32, pady=(0, 16)
         )
-        name_input_field.grid(row=0, column=0, sticky="ew", padx=6, pady=(4, 2))
-        username_input_field.grid(row=1, column=0, sticky="ew", padx=6, pady=2)
-        password_input_field.grid(row=2, column=0, sticky="ew", padx=6, pady=2)
+        name_input_field.grid(row=0, column=0, sticky="ew", padx=6, pady=4)
+        username_input_field.grid(row=1, column=0, sticky="ew", padx=6, pady=4)
+        password_input_field.grid(row=2, column=0, sticky="ew", padx=6, pady=4)
+        save_button.grid(row=3, column=0, sticky="ew", padx=6, pady=6)
 
     def on_item_type_change(self, choice):
         item_type = choice.lower().replace(" ", "_")
