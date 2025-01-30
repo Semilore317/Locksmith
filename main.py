@@ -55,6 +55,8 @@ class App(ctk.CTk):
             controllers={
                 "show_all_items": self.items_frame.show_all_items,
                 "show_bin_items": self.items_frame.show_bin_items,
+                "show_logins": self.items_frame.show_logins,
+                "show_notes": self.items_frame.show_secure_notes,
             },
         )
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")

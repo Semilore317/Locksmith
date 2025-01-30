@@ -53,6 +53,7 @@ class SidebarFrame(ctk.CTkFrame):
             height=self.BUTTON_HEIGHT,
             corner_radius=self.BUTTON_CORNER_RADIUS,
             font=button_font,
+            command=controllers["show_logins"],
         )
 
         # Secure Note Button
@@ -63,6 +64,7 @@ class SidebarFrame(ctk.CTkFrame):
             height=self.BUTTON_HEIGHT,
             corner_radius=self.BUTTON_CORNER_RADIUS,
             font=button_font,
+            command=controllers["show_notes"],
         )
 
         # Layout the elements with reduced padding and width
