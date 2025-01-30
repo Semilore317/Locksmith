@@ -45,7 +45,14 @@ class App(ctk.CTk):
         self.items_frame.grid(row=0, column=1, sticky="nsew")
 
         # CRU (Create, Read, Update) Frame
-        self.cru_frame = CRUFrame(self.body_frame, width=580)
+        self.cru_frame = CRUFrame(
+            self.body_frame,
+            width=580,
+            event_handlers={
+                "on_save": self.items_frame.show_all_items,
+                "on_update": self.items_frame.show_all_items,
+            },
+        )
         self.cru_frame.grid_propagate(False)
         self.cru_frame.grid(row=0, column=2, sticky="nsew")
 
