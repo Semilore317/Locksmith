@@ -1,6 +1,8 @@
 import customtkinter as ctk
 from components.frames.items_frames.all_items_frame import AllItemsFrame
 from components.frames.items_frames.bin_items_frame import BinItemsFrame
+from components.frames.items_frames.logins_frame import LoginItemsFrame
+from components.frames.items_frames.notes_frame import NoteItemsFrame
 
 
 class ItemsFrame(ctk.CTkFrame):
@@ -24,3 +26,9 @@ class ItemsFrame(ctk.CTkFrame):
 
     def show_bin_items(self):
         self.__switch_frame(BinItemsFrame)
+
+    def show_logins(self):
+        self.__switch_frame(LoginItemsFrame)
+
+    def show_secure_notes(self):
+        self.__switch_frame(NoteItemsFrame)
