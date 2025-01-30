@@ -7,12 +7,12 @@ class AddItemsFrame(ctk.CTkFrame):
 
         self.grid_columnconfigure(0, weight=1)
 
-        title_label = ctk.CTkLabel(
+        self.title_label = ctk.CTkLabel(
             self,
             text="ADD LOGIN CREDENTIALS",
             font=ctk.CTkFont(family="Arial", size=28),
         )
-        title_label.grid(row=0, column=0, sticky="ew", padx=16, pady=(32, 16))
+        self.title_label.grid(row=0, column=0, sticky="ew", padx=16, pady=(32, 16))
 
         # ----------------- Options Menu for selecting the type of item - Note or Login
         select_item_type_frame = ctk.CTkFrame(
@@ -49,9 +49,21 @@ class AddItemsFrame(ctk.CTkFrame):
             font=ctk.CTkFont(family="Inter", size=16),
             dropdown_font=ctk.CTkFont(family="Inter", size=16),
             values=["Login", "Secure Note"],
+            command=self.on_item_type_change,
         )
         select_item_type_frame.grid(row=1, column=0, sticky="ew", padx=32, pady=(0, 16))
         select_item_type_label.grid(row=0, column=0, sticky="ew", padx=4, pady=(4, 2))
         options_menu_frame.grid(row=1, column=0, sticky="ew", padx=4, pady=(0, 4))
         item_type_options_menu.grid(row=0, column=0, sticky="ew", padx=(2, 3), pady=2)
         # --------------------------------------------------------------------------
+
+        # ----------------- Form for the user to enter the login credentials/note
+
+    def on_item_type_change(self, choice):
+        item_type = choice.lower().replace(" ", "_")
+        if item_type == "login":
+            self.title_label.configure(text="ADD LOGIN CREDENTIALS")
+        elif item_type == "secure_note":
+            self.title_label.configure(text="ADD SECURE NOTE")
+        else:
+            print("Unknown type")
