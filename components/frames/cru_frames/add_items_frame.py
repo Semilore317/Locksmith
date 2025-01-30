@@ -20,6 +20,7 @@ class AddItemsFrame(ctk.CTkFrame):
                 "name": ctk.StringVar(),
             },
         }
+        self.password_switch_var = ctk.StringVar(value="off")
 
         # Configurations
         self.grid_columnconfigure(0, weight=1)
@@ -92,10 +93,21 @@ class AddItemsFrame(ctk.CTkFrame):
             text_var=self.form_data["login"]["username"],
         )
 
-        password_input_field = InputField(
+        self.password_input_field = InputField(
             self.add_login_form_frame,
             "Password",
             text_var=self.form_data["login"]["password"],
+        )
+        self.password_input_field.field_entry.configure(show="*")
+
+        show_password_switch = ctk.CTkSwitch(
+            self.add_login_form_frame,
+            text="Show password",
+            variable=self.password_switch_var,
+            onvalue="on",
+            offvalue="off",
+            text_color="#000000",
+            command=self.show_password,
         )
 
         self.login_form_error_label = ctk.CTkLabel(
@@ -117,9 +129,12 @@ class AddItemsFrame(ctk.CTkFrame):
         # Grid placement for login credentials form items
         credentials_name_input_field.grid(row=0, column=0, sticky="ew", padx=6, pady=4)
         username_input_field.grid(row=1, column=0, sticky="ew", padx=6, pady=4)
-        password_input_field.grid(row=2, column=0, sticky="ew", padx=6, pady=(4, 0))
-        self.login_form_error_label.grid(row=3, column=0, sticky="w", padx=6)
-        save_credentials_button.grid(row=4, column=0, sticky="ew", padx=6, pady=(0, 6))
+        self.password_input_field.grid(
+            row=2, column=0, sticky="ew", padx=6, pady=(4, 0)
+        )
+        show_password_switch.grid(row=3, column=0, sticky="w", padx=6)
+        self.login_form_error_label.grid(row=4, column=0, sticky="w", padx=6)
+        save_credentials_button.grid(row=5, column=0, sticky="ew", padx=6, pady=(0, 6))
         # --------------------------------------------------------------------------
 
         # ----------------- Secure Note Form
@@ -239,3 +254,9 @@ class AddItemsFrame(ctk.CTkFrame):
         else:
             # Show errors in the form
             self.__notify_about_errors("note")
+
+    def show_password(self):
+        if self.password_switch_var.get() == "on":
+            self.password_input_field.field_entry.configure(show="")
+        else:
+            self.password_input_field.field_entry.configure(show="*")
