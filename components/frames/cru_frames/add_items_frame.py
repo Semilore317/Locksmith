@@ -114,7 +114,7 @@ class AddItemsFrame(ctk.CTkFrame):
             self.add_login_form_frame,
             text="",
             fg_color="transparent",
-            text_color="#000000",
+            text_color="#C92929",
         )
 
         save_credentials_button = Button(
@@ -158,7 +158,7 @@ class AddItemsFrame(ctk.CTkFrame):
             self.add_note_form_frame,
             text="",
             fg_color="transparent",
-            text_color="#000000",
+            text_color="#C92929",
         )
 
         save_note_button = Button(
