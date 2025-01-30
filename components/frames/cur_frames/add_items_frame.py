@@ -105,10 +105,7 @@ class AddItemsFrame(ctk.CTkFrame):
             height=45,
         )
 
-        # Login Credentials Form Grid Placement
-        self.add_login_form_frame.grid(
-            row=2, column=0, sticky="ew", padx=32, pady=(0, 16)
-        )
+        # Grid placement for login credentials form items
         credentials_name_input_field.grid(row=0, column=0, sticky="ew", padx=6, pady=4)
         username_input_field.grid(row=1, column=0, sticky="ew", padx=6, pady=4)
         password_input_field.grid(row=2, column=0, sticky="ew", padx=6, pady=4)
@@ -141,20 +138,33 @@ class AddItemsFrame(ctk.CTkFrame):
             height=45,
         )
 
-        # Secure Note Form Grid Placement
-        self.add_note_form_frame.grid(
-            row=2, column=0, sticky="ew", padx=32, pady=(0, 16)
-        )
+        # Grid placement for secure note form items
         note_name_input_field.grid(row=0, column=0, sticky="ew", padx=6, pady=4)
         content_input_field.grid(row=1, column=0, sticky="ew", padx=6, pady=4)
         save_note_button.grid(row=2, column=0, sticky="ew", padx=6, pady=6)
         # --------------------------------------------------------------------------
+        self.current_form = self.add_login_form_frame
+        self.current_form.grid(row=2, column=0, sticky="ew", padx=32, pady=(0, 16))
 
     def on_item_type_change(self, choice):
         item_type = choice.lower().replace(" ", "_")
         if item_type == "login":
-            self.title_label.configure(text="ADD LOGIN CREDENTIALS")
+            self.show_login_credentials_form()
         elif item_type == "secure_note":
-            self.title_label.configure(text="ADD SECURE NOTE")
+            self.show_secure_note_form()
         else:
             print("Unknown type")
+            # Meh, just show the default form
+            self.show_login_credentials_form()
+
+    def show_login_credentials_form(self):
+        self.title_label.configure(text="ADD LOGIN CREDENTIALS")
+        self.current_form.grid_forget()
+        self.current_form = self.add_login_form_frame
+        self.current_form.grid(row=2, column=0, sticky="ew", padx=32, pady=(0, 16))
+
+    def show_secure_note_form(self):
+        self.title_label.configure(text="ADD SECURE NOTE")
+        self.current_form.grid_forget()
+        self.current_form = self.add_note_form_frame
+        self.current_form.grid(row=2, column=0, sticky="ew", padx=32, pady=(0, 16))
