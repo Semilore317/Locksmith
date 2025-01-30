@@ -102,7 +102,7 @@ class AddItemsFrame(ctk.CTkFrame):
             text="Save",
             corner_radius=2,
             font=ctk.CTkFont(family="Inter", size=16),
-            height=40,
+            height=45,
         )
 
         # Login Credentials Form Grid Placement
