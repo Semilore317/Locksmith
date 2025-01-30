@@ -1,0 +1,32 @@
+[
+    {
+        "name": "diddy",
+        "username": "oiler",
+        "_password": "gAAAAABnm3ilcPxSfMV_XRaecQR3LujWSevBRTMVuny5BdyIotEMIIw3lb345JYp3K-dGJHFxrN8EWxsel7bfWAlkgpOgBgu7g==",
+        "timestamp": 1738242213.2967024,
+        "id": "90a61401-a92a-4265-8f0e-474a46e0f14d",
+        "is_in_bin": true
+    },
+    {
+        "name": "Updated Site",
+        "username": "new_user",
+        "_password": "gAAAAABnm3ilJl_ij1jx1C6OwgoLKy0Ttr8cmITDQ4Z6OF1g_Tr8vtHBFKdcW15rYZEqSBEGNlbqDVSgFtWJqaqDB45rW_vHHw==",
+        "timestamp": 1738242213.2968066,
+        "id": "6b74c76c-d9db-47e9-b890-ee6d41802e97",
+        "is_in_bin": false
+    },
+    {
+        "name": "Private Note",
+        "_note": "This is the updated content.",
+        "timestamp": 1738242213.2968712,
+        "id": "178b3372-5328-47db-a2c2-218d411e3c82",
+        "is_in_bin": false
+    },
+    {
+        "name": "Another Note",
+        "_note": "gAAAAABnm3ilQ01HS4Z1LpHGWay8lDo2PVvQ3UPa43lqqZ-E3sAEQuTbI5OkxA_7zTkhxmZbZXasfsdYPD2qxv8yFsPO5HMU4uGCZDBtUVy-6wyogIcPgSE=",
+        "timestamp": 1738242213.2969658,
+        "id": "7c4d896c-974f-44cb-85e6-88c3d6e78c51",
+        "is_in_bin": false
+    }
+]
