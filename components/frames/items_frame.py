@@ -11,6 +11,7 @@ class ItemsFrame(ctk.CTkFrame):
 
         # Configurations
         self.grid_columnconfigure(0, weight=1)
+        self.configure(fg_color="#2F2F2F")
 
         # Show all items by default
         self.current_frame = AllItemsFrame(self, fg_color="transparent")

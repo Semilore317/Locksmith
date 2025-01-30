@@ -8,4 +8,4 @@ class CRUFrame(ctk.CTkFrame):
 
         # Configurations
         self.grid_columnconfigure(0, weight=1)
-        
+        self.configure(fg_color="#464646")

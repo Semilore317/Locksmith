@@ -6,6 +6,9 @@ class SidebarFrame(ctk.CTkFrame):
     def __init__(self, master, controllers, **kwargs):
         super().__init__(master, **kwargs)
 
+        # Configurations
+        self.configure(fg_color="#222222")
+
         # Define some constants for the sidebar components
         self.BUTTON_WIDTH = 140
         self.BUTTON_HEIGHT = 45

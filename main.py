@@ -30,7 +30,7 @@ class App(ctk.CTk):
             print(f"Error loading icon: {e}")
 
         # Header
-        self.header_frame = HeaderFrame(self, fg_color="#222222")
+        self.header_frame = HeaderFrame(self)
         self.header_frame.grid(row=0, column=0, sticky="ew")
 
         # Body
@@ -40,17 +40,16 @@ class App(ctk.CTk):
         self.body_frame.grid_rowconfigure(0, weight=1)
 
         # Items Frame
-        self.items_frame = ItemsFrame(self.body_frame, fg_color="#2F2F2F")
+        self.items_frame = ItemsFrame(self.body_frame)
         self.items_frame.grid(row=0, column=1, sticky="nsew")
 
         # CRU (Create, Read, Update) Frame
-        self.cru_frame = CRUFrame(self.body_frame, fg_color="#464646")
+        self.cru_frame = CRUFrame(self.body_frame)
         self.cru_frame.grid(row=0, column=2, sticky="nsew")
 
         # Sidebar
         self.sidebar_frame = SidebarFrame(
             self.body_frame,
-            fg_color="#222222",
             width=180,
             controllers={
                 "show_all_items": self.items_frame.show_all_items,
