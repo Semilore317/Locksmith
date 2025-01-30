@@ -24,7 +24,8 @@ class InputField(ctk.CTkFrame):
             text_color="#000000",
             font=ctk.CTkFont(family="Inter", size=16),
             textvariable=text_var,
+            height=40,
         )
 
-        field_label.grid(row=0, column=0, sticky="ew", pady=(4, 2))
-        field_entry.grid(row=1, column=0, sticky="ew", pady=(0, 4))
+        field_label.grid(row=0, column=0, sticky="ew", pady=(0, 2))
+        field_entry.grid(row=1, column=0, sticky="ew", pady=(2, 0))
