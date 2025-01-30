@@ -17,7 +17,7 @@ class TextboxField(ctk.CTkFrame):
             font=ctk.CTkFont(family="Arial", size=16),
         )
 
-        field_textbox = ctk.CTkTextbox(
+        self.field_textbox = ctk.CTkTextbox(
             self,
             corner_radius=0,
             fg_color="#B6B6B6",
@@ -29,4 +29,7 @@ class TextboxField(ctk.CTkFrame):
         )
 
         field_label.grid(row=0, column=0, sticky="ew", pady=(0, 2))
-        field_textbox.grid(row=1, column=0, sticky="ew", pady=(2, 0))
+        self.field_textbox.grid(row=1, column=0, sticky="ew", pady=(2, 0))
+
+    def get_content(self):
+        return self.field_textbox.get("0.0", "end")
