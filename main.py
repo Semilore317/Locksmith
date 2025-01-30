@@ -36,7 +36,7 @@ class App(ctk.CTk):
         # Body
         self.body_frame = ctk.CTkFrame(self, border_width=2)
         self.body_frame.grid(row=1, column=0, sticky="nsew")
-        self.body_frame.grid_columnconfigure((1, 2), weight=3)
+        self.body_frame.grid_columnconfigure((1, 2), weight=1)
         self.body_frame.grid_rowconfigure(0, weight=1)
 
         # Items Frame
