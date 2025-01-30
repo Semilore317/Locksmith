@@ -1,4 +1,4 @@
-# CRU - Create, Update, Read
+# CRU - Create, Read, Update
 import customtkinter as ctk
 
 from components.frames.cru_frames.add_items_frame import AddItemsFrame
@@ -9,8 +9,6 @@ class CRUFrame(ctk.CTkFrame):
         super().__init__(master, **kwargs)
 
         self.event_handlers = event_handlers
-
-        # Configurations
         self.grid_columnconfigure(0, weight=1)
         self.configure(fg_color="#464646")
 
