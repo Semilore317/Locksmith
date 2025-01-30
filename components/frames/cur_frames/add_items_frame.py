@@ -1,10 +1,25 @@
 import customtkinter as ctk
 
+from components.frames.cur_frames.components.input_field import InputField
+
 
 class AddItemsFrame(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
+        self.form_data = {
+            "login": {
+                "name": ctk.StringVar(),
+                "username": ctk.StringVar(),
+                "password": ctk.StringVar(),
+            },
+            "note": {
+                "name": ctk.StringVar(),
+                "content": ctk.StringVar(),
+            },
+        }
+
+        # Configurations
         self.grid_columnconfigure(0, weight=1)
 
         self.title_label = ctk.CTkLabel(
@@ -52,12 +67,42 @@ class AddItemsFrame(ctk.CTkFrame):
             command=self.on_item_type_change,
         )
         select_item_type_frame.grid(row=1, column=0, sticky="ew", padx=32, pady=(0, 16))
-        select_item_type_label.grid(row=0, column=0, sticky="ew", padx=4, pady=(4, 2))
-        options_menu_frame.grid(row=1, column=0, sticky="ew", padx=4, pady=(0, 4))
+        select_item_type_label.grid(row=0, column=0, sticky="ew", padx=6, pady=(4, 2))
+        options_menu_frame.grid(row=1, column=0, sticky="ew", padx=6, pady=(0, 4))
         item_type_options_menu.grid(row=0, column=0, sticky="ew", padx=(2, 3), pady=2)
         # --------------------------------------------------------------------------
 
-        # ----------------- Form for the user to enter the login credentials/note
+        # ----------------- Login Credentials Form
+        self.add_login_form_frame = ctk.CTkFrame(
+            self, fg_color="#B6B6B6", corner_radius=2
+        )
+        self.add_login_form_frame.grid_columnconfigure(0, weight=1)
+
+        name_input_field = InputField(
+            self.add_login_form_frame,
+            "Name",
+            text_var=self.form_data["login"]["name"],
+        )
+
+        username_input_field = InputField(
+            self.add_login_form_frame,
+            "Username",
+            text_var=self.form_data["login"]["username"],
+        )
+
+        password_input_field = InputField(
+            self.add_login_form_frame,
+            "Password",
+            text_var=self.form_data["login"]["password"],
+        )
+
+        # Login Credentials Form Grid Placement
+        self.add_login_form_frame.grid(
+            row=2, column=0, sticky="ew", padx=32, pady=(0, 16)
+        )
+        name_input_field.grid(row=0, column=0, sticky="ew", padx=6, pady=(4, 2))
+        username_input_field.grid(row=1, column=0, sticky="ew", padx=6, pady=2)
+        password_input_field.grid(row=2, column=0, sticky="ew", padx=6, pady=2)
 
     def on_item_type_change(self, choice):
         item_type = choice.lower().replace(" ", "_")
