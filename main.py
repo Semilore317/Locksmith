@@ -40,11 +40,13 @@ class App(ctk.CTk):
         self.body_frame.grid_rowconfigure(0, weight=1)
 
         # Items Frame
-        self.items_frame = ItemsFrame(self.body_frame)
+        self.items_frame = ItemsFrame(self.body_frame, width=580)
+        self.items_frame.grid_propagate(False)
         self.items_frame.grid(row=0, column=1, sticky="nsew")
 
         # CRU (Create, Read, Update) Frame
-        self.cru_frame = CRUFrame(self.body_frame)
+        self.cru_frame = CRUFrame(self.body_frame, width=580)
+        self.cru_frame.grid_propagate(False)
         self.cru_frame.grid(row=0, column=2, sticky="nsew")
 
         # Sidebar
