@@ -1,8 +1,7 @@
-# CUR - Create, Update, Read
+# CRU - Create, Update, Read
 import customtkinter as ctk
 
-from components.frames.cur_frames.add_items_frame import AddItemsFrame
-from components.frames.cur_frames.add_note_frame import AddNotesFrame
+from components.frames.cru_frames.add_items_frame import AddItemsFrame
 
 
 class CRUFrame(ctk.CTkFrame):

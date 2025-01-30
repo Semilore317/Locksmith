@@ -1,8 +1,8 @@
 import customtkinter as ctk
 
 from components.buttons.button import Button
-from components.frames.cur_frames.components.input_field import InputField
-from components.frames.cur_frames.components.textbox_field import TextboxField
+from components.frames.cru_frames.components.input_field import InputField
+from components.frames.cru_frames.components.textbox_field import TextboxField
 
 
 class AddItemsFrame(ctk.CTkFrame):
