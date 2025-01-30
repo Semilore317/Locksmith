@@ -6,9 +6,10 @@ from components.frames.cru_frames.components.textbox_field import TextboxField
 
 
 class AddItemsFrame(ctk.CTkFrame):
-    def __init__(self, master, **kwargs):
+    def __init__(self, master, event_handlers, **kwargs):
         super().__init__(master, **kwargs)
 
+        self.on_save_event = event_handlers["on_save"]
         self.form_data = {
             "login": {
                 "name": ctk.StringVar(),
@@ -81,13 +82,13 @@ class AddItemsFrame(ctk.CTkFrame):
 
         credentials_name_input_field = InputField(
             self.add_login_form_frame,
-            "Name",
+            "Name*",
             text_var=self.form_data["login"]["name"],
         )
 
         username_input_field = InputField(
             self.add_login_form_frame,
-            "Username",
+            "Username*",
             text_var=self.form_data["login"]["username"],
         )
 
@@ -97,19 +98,28 @@ class AddItemsFrame(ctk.CTkFrame):
             text_var=self.form_data["login"]["password"],
         )
 
+        self.login_form_error_label = ctk.CTkLabel(
+            self.add_login_form_frame,
+            text="",
+            fg_color="transparent",
+            text_color="#000000",
+        )
+
         save_credentials_button = Button(
             self.add_login_form_frame,
             text="Save",
             corner_radius=2,
             font=ctk.CTkFont(family="Inter", size=16),
             height=45,
+            command=self.save_login_credentials,
         )
 
         # Grid placement for login credentials form items
         credentials_name_input_field.grid(row=0, column=0, sticky="ew", padx=6, pady=4)
         username_input_field.grid(row=1, column=0, sticky="ew", padx=6, pady=4)
-        password_input_field.grid(row=2, column=0, sticky="ew", padx=6, pady=4)
-        save_credentials_button.grid(row=3, column=0, sticky="ew", padx=6, pady=6)
+        password_input_field.grid(row=2, column=0, sticky="ew", padx=6, pady=(4, 0))
+        self.login_form_error_label.grid(row=3, column=0, sticky="w", padx=6)
+        save_credentials_button.grid(row=4, column=0, sticky="ew", padx=6, pady=(0, 6))
         # --------------------------------------------------------------------------
 
         # ----------------- Secure Note Form
@@ -120,13 +130,20 @@ class AddItemsFrame(ctk.CTkFrame):
 
         note_name_input_field = InputField(
             self.add_note_form_frame,
-            label="Name",
+            label="Name*",
             text_var=self.form_data["note"]["name"],
         )
 
-        content_textbox_field = TextboxField(
+        self.content_textbox_field = TextboxField(
             self.add_note_form_frame,
-            label="Content",
+            label="Content*",
+        )
+
+        self.note_form_error_label = ctk.CTkLabel(
+            self.add_note_form_frame,
+            text="",
+            fg_color="transparent",
+            text_color="#000000",
         )
 
         save_note_button = Button(
@@ -135,12 +152,16 @@ class AddItemsFrame(ctk.CTkFrame):
             corner_radius=2,
             font=ctk.CTkFont(family="Inter", size=16),
             height=45,
+            command=self.save_note,
         )
 
         # Grid placement for secure note form items
         note_name_input_field.grid(row=0, column=0, sticky="ew", padx=6, pady=4)
-        content_textbox_field.grid(row=1, column=0, sticky="ew", padx=6, pady=4)
-        save_note_button.grid(row=2, column=0, sticky="ew", padx=6, pady=6)
+        self.content_textbox_field.grid(
+            row=1, column=0, sticky="ew", padx=6, pady=(4, 0)
+        )
+        self.note_form_error_label.grid(row=2, column=0, sticky="w", padx=6)
+        save_note_button.grid(row=3, column=0, sticky="ew", padx=6, pady=(0, 6))
         # --------------------------------------------------------------------------
         self.current_form = self.add_login_form_frame
         self.current_form.grid(row=2, column=0, sticky="ew", padx=32, pady=(0, 16))
@@ -167,3 +188,54 @@ class AddItemsFrame(ctk.CTkFrame):
         self.current_form.grid_forget()
         self.current_form = self.add_note_form_frame
         self.current_form.grid(row=2, column=0, sticky="ew", padx=32, pady=(0, 16))
+
+    def __notify_about_errors(self, type):
+        if type == "login":
+            self.login_form_error_label.configure(
+                text="Name and Username are required fields."
+            )
+            self.after(3000, lambda: self.login_form_error_label.configure(text=""))
+        elif type == "note":
+            self.note_form_error_label.configure(
+                text="Name and Content are required fields."
+            )
+            self.after(3000, lambda: self.note_form_error_label.configure(text=""))
+        else:
+            print("Unknown type")
+
+    def save_login_credentials(self):
+        # Validate the inputs, show error if not valid
+        # Save if all inputs are valid
+        name = self.form_data["login"]["name"].get().strip()
+        username = self.form_data["login"]["username"].get().strip()
+        password = self.form_data["login"]["password"].get().strip()
+        inputs_are_valid = True
+
+        if len(name) == 0 or len(username) == 0:
+            inputs_are_valid = False
+
+        if inputs_are_valid:
+            # Save the data
+            # TODO
+            self.on_save_event()
+        else:
+            # Show errors in the form
+            self.__notify_about_errors("login")
+
+    def save_note(self):
+        # Validate the inputs, show error if not valid
+        # Save if all inputs are valid
+        name = self.form_data["note"]["name"].get().strip()
+        content = self.content_textbox_field.get_content().strip()
+        inputs_are_valid = True
+
+        if len(name) == 0 or len(content) == 0:
+            inputs_are_valid = False
+
+        if inputs_are_valid:
+            # Save the data
+            # TODO
+            self.on_save_event()
+        else:
+            # Show errors in the form
+            self.__notify_about_errors("note")
