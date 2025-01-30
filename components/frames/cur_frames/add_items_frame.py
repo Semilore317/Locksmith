@@ -2,6 +2,7 @@ import customtkinter as ctk
 
 from components.buttons.button import Button
 from components.frames.cur_frames.components.input_field import InputField
+from components.frames.cur_frames.components.textbox_field import TextboxField
 
 
 class AddItemsFrame(ctk.CTkFrame):
@@ -16,7 +17,6 @@ class AddItemsFrame(ctk.CTkFrame):
             },
             "note": {
                 "name": ctk.StringVar(),
-                "content": ctk.StringVar(),
             },
         }
 
@@ -124,10 +124,9 @@ class AddItemsFrame(ctk.CTkFrame):
             text_var=self.form_data["note"]["name"],
         )
 
-        content_input_field = InputField(
+        content_textbox_field = TextboxField(
             self.add_note_form_frame,
             label="Content",
-            text_var=self.form_data["note"]["content"],
         )
 
         save_note_button = Button(
@@ -140,7 +139,7 @@ class AddItemsFrame(ctk.CTkFrame):
 
         # Grid placement for secure note form items
         note_name_input_field.grid(row=0, column=0, sticky="ew", padx=6, pady=4)
-        content_input_field.grid(row=1, column=0, sticky="ew", padx=6, pady=4)
+        content_textbox_field.grid(row=1, column=0, sticky="ew", padx=6, pady=4)
         save_note_button.grid(row=2, column=0, sticky="ew", padx=6, pady=6)
         # --------------------------------------------------------------------------
         self.current_form = self.add_login_form_frame
