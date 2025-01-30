@@ -3,8 +3,11 @@ from components.buttons.button import Button
 
 
 class SidebarFrame(ctk.CTkFrame):
-    def __init__(self, master, **kwargs):
+    def __init__(self, master, controllers, **kwargs):
         super().__init__(master, **kwargs)
+
+        # Configurations
+        self.configure(fg_color="#222222")
 
         # Define some constants for the sidebar components
         self.BUTTON_WIDTH = 140
@@ -22,6 +25,7 @@ class SidebarFrame(ctk.CTkFrame):
             corner_radius=self.BUTTON_CORNER_RADIUS,
             text="All Items",
             font=button_font,
+            command=controllers["show_all_items"],
         )
 
         # Bin Button
@@ -32,6 +36,7 @@ class SidebarFrame(ctk.CTkFrame):
             height=self.BUTTON_HEIGHT,
             corner_radius=self.BUTTON_CORNER_RADIUS,
             font=button_font,
+            command=controllers["show_bin_items"],
         )
 
         # Section Label ("Types")
@@ -46,21 +51,23 @@ class SidebarFrame(ctk.CTkFrame):
         # Login Button
         login_button = Button(
             self,
-            text="Login",
+            text="Logins",
             width=self.BUTTON_WIDTH,
             height=self.BUTTON_HEIGHT,
             corner_radius=self.BUTTON_CORNER_RADIUS,
             font=button_font,
+            command=controllers["show_logins"],
         )
 
         # Secure Note Button
         secure_note_button = Button(
             self,
-            text="Secure Note",
+            text="Secure Notes",
             width=self.BUTTON_WIDTH,
             height=self.BUTTON_HEIGHT,
             corner_radius=self.BUTTON_CORNER_RADIUS,
             font=button_font,
+            command=controllers["show_notes"],
         )
 
         # Layout the elements with reduced padding and width
