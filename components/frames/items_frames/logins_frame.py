@@ -7,7 +7,7 @@ class LoginItemsFrame(ctk.CTkFrame):
 
         title_label = ctk.CTkLabel(
             self,
-            text="Logins",
+            text="LOGINS",
             font=ctk.CTkFont(family="Arial", size=16, weight="bold"),
         )
         title_label.grid(row=0, column=0, sticky="ew")

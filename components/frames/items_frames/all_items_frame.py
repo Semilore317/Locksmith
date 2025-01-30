@@ -8,7 +8,7 @@ class AllItemsFrame(ctk.CTkFrame):
 
         title_label = ctk.CTkLabel(
             self,
-            text="All Items",
+            text="ALL ITEMS",
             font=ctk.CTkFont(family="Arial", size=16, weight="bold"),
         )
         title_label.grid(row=0, column=0, sticky="ew")
