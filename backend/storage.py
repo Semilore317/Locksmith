@@ -3,7 +3,7 @@ import os
 import time
 from backend.models import LoginItem, SecureNoteItem
 
-DATA_FILE = "data.json"
+DATA_FILE = "appdata/data.json"
 
 
 def load_data():
