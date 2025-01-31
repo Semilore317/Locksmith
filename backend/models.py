@@ -9,7 +9,7 @@ class LoginItem:
     name: str
     username: str
     password: str
-    timestamp: str = field(default_factory=lambda: time.time())
+    created_at: str = field(default_factory=lambda: time.time())
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     is_in_bin: bool = False
 
@@ -27,7 +27,7 @@ class LoginItem:
             "name": self.name,
             "username": self.username,
             "password": self.password,
-            "timestamp": self.timestamp,
+            "created_at": self.created_at,
             "id": self.id,
             "is_in_bin": self.is_in_bin,
         }
@@ -42,7 +42,7 @@ class LoginItem:
 class SecureNoteItem:
     name: str
     note: str
-    timestamp: str = field(default_factory=lambda: time.time())
+    created_at: str = field(default_factory=lambda: time.time())
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     is_in_bin: bool = False
 
@@ -59,7 +59,7 @@ class SecureNoteItem:
         return {
             "name": self.name,
             "note": self.note,
-            "timestamp": self.timestamp,
+            "created_at": self.created_at,
             "id": self.id,
             "is_in_bin": self.is_in_bin,
         }
