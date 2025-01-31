@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 import time
 from backend.encryption import encrypt, decrypt
 
+
 @dataclass
 class LoginItem:
     name: str
@@ -24,6 +25,7 @@ class LoginItem:
     @property
     def password(self):
         return decrypt(self._password)
+
 
 @dataclass
 class SecureNoteItem:
