@@ -6,32 +6,56 @@ from backend.models import LoginItem, SecureNoteItem
 DATA_FILE = "appdata/data.json"
 
 
+# Load saved login credentials and notes from JSON file
 def load_data():
-    """Load saved login credentials and notes from JSON file."""
+    data: list[LoginItem | SecureNoteItem] = []
+
+    # Return empty list if file doesn't exist
     if not os.path.exists(DATA_FILE):
-        return []  # Return empty list if file doesn't exist
+        return data
 
     with open(DATA_FILE, "r") as file:
         try:
             data = json.load(file)
         except json.JSONDecodeError:
-            return []  # Return empty list if file is corrupted
+            # Return empty list if file is corrupted
+            return []
 
     # Convert JSON data to objects while preserving IDs
     objects = []
     for item in data:
-        if "username" in item:  # It's a LoginItem
+        is_login_item = "username" in item
+        if is_login_item:
             objects.append(LoginItem(**item))
-        else:  # It's a SecureNoteItem
+        else:
             objects.append(SecureNoteItem(**item))
 
-    return objects  # Return list of `LoginItem` and `SecureNoteItem` objects
+    # Return list of `LoginItem` and `SecureNoteItem` objects
+    return objects
 
 
-def save_data(data):
-    """Save login credentials and notes to JSON file."""
-    with open(DATA_FILE, "w", encoding="utf-8") as file:
-        json.dump([obj.__dict__ for obj in data], file, indent=4)
+# Save login credentials and notes to JSON file
+"""
+Load saved login credentials and notes from JSON file.
+Parse them and add new item to the parsed list
+Save the list back to the JSON file.
+"""
+def save_data(data: LoginItem | SecureNoteItem):
+    # Check if the data is a valid LoginItem or SecureNoteItem object
+    if not isinstance(data, (LoginItem, SecureNoteItem)):
+        raise Exception(
+            "Invalid data passed. Must be a LoginItem or SecureNoteItem object"
+        )
+
+    latest_data = load_data()
+    # Prevent adding duplicate items
+    duplicated_items = filter(lambda x: x.id == data.id, latest_data)
+    if len(list(duplicated_items)) == 0:
+        latest_data.append(data)
+        with open(DATA_FILE, "w", encoding="utf-8") as file:
+            json.dump([item.get_raw_data() for item in latest_data], file, indent=4)
+    else:
+        print("Item already exists")
 
 
 def delete_permanently(item_id):
@@ -72,9 +96,9 @@ def search_items(keyword):
     results = []
     for item in data:
         if (
-                keyword in item.name.lower() or
-                (hasattr(item, "username") and keyword in item.username.lower()) or
-                (hasattr(item, "note") and keyword in item.note.lower())
+            keyword in item.name.lower()
+            or (hasattr(item, "username") and keyword in item.username.lower())
+            or (hasattr(item, "note") and keyword in item.note.lower())
         ):
             results.append(item)
 
@@ -99,19 +123,23 @@ def filter_by_bin_status(in_bin=True):
 
 import time
 
+
 def return_all_items():
     """Return all the logins and notes in chronological order."""
     data = load_data()
 
     # Ensure all items have a valid `created_at` field, defaulting to current time if missing
     for item in data:
-        if not hasattr(item, "created_at") or not isinstance(item.created_at, (int, float)):
+        if not hasattr(item, "created_at") or not isinstance(
+            item.created_at, (int, float)
+        ):
             item.created_at = time.time()  # Assign current timestamp if missing
 
     # Sort by created_at (ascending order)
     sorted_data = sorted(data, key=lambda x: x.created_at)
 
     return sorted_data
+
 
 def edit_credential(item_id, new_data):
     """
