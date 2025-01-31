@@ -5,6 +5,13 @@ from backend.models import LoginItem, SecureNoteItem
 
 DATA_FILE = "appdata/data.json"
 
+def init_appdata():
+    if not os.path.exists("appdata"):
+        os.makedirs("appdata")
+
+    if not os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "w") as file:
+            json.dump([], file)
 
 # Load saved login credentials and notes from JSON file
 def load_data():
@@ -119,10 +126,6 @@ def filter_by_bin_status(in_bin=True):
     """Filter items based on whether they are in the bin or not."""
     data = load_data()
     return [item for item in data if item.is_in_bin == in_bin]
-
-
-import time
-
 
 def return_all_items():
     """Return all the logins and notes in chronological order."""
