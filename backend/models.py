@@ -5,7 +5,7 @@ from backend.encryption import encrypt, decrypt
 
 
 @dataclass
-class LoginItem:
+class LoginItemModel:
     name: str
     username: str
     password: str
@@ -39,7 +39,7 @@ class LoginItem:
 
 
 @dataclass
-class SecureNoteItem:
+class NoteItemModel:
     name: str
     note: str
     created_at: str = field(default_factory=lambda: time.time())

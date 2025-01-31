@@ -1,7 +1,7 @@
 import json
 import os
 import time
-from backend.models import LoginItem, SecureNoteItem
+from backend.models import LoginItemModel, NoteItemModel
 
 DATA_FILE = "appdata/data.json"
 
@@ -15,7 +15,7 @@ def init_appdata():
 
 # Load saved login credentials and notes from JSON file
 def load_data():
-    data: list[LoginItem | SecureNoteItem] = []
+    data: list[LoginItemModel | NoteItemModel] = []
 
     # Return empty list if file doesn't exist
     if not os.path.exists(DATA_FILE):
@@ -33,11 +33,11 @@ def load_data():
     for item in data:
         is_login_item = "username" in item
         if is_login_item:
-            objects.append(LoginItem(**item))
+            objects.append(LoginItemModel(**item))
         else:
-            objects.append(SecureNoteItem(**item))
+            objects.append(NoteItemModel(**item))
 
-    # Return list of `LoginItem` and `SecureNoteItem` objects
+    # Return list of `LoginItemModel` and `NoteItemModel` objects
     return objects
 
 
@@ -47,11 +47,11 @@ Load saved login credentials and notes from JSON file.
 Parse them and add new item to the parsed list
 Save the list back to the JSON file.
 """
-def save_data(data: LoginItem | SecureNoteItem):
-    # Check if the data is a valid LoginItem or SecureNoteItem object
-    if not isinstance(data, (LoginItem, SecureNoteItem)):
+def save_data(data: LoginItemModel | NoteItemModel):
+    # Check if the data is a valid LoginItemModel or NoteItemModel object
+    if not isinstance(data, (LoginItemModel, NoteItemModel)):
         raise Exception(
-            "Invalid data passed. Must be a LoginItem or SecureNoteItem object"
+            "Invalid data passed. Must be a LoginItemModel or NoteItemModel object"
         )
 
     latest_data = load_data()
@@ -113,12 +113,12 @@ def search_items(keyword):
 
 
 def filter_by_type(item_type):
-    """Filter items by type (LoginItem or SecureNoteItem)."""
+    """Filter items by type (LoginItemModel or NoteItemModel)."""
     data = load_data()
     if item_type == "login":
-        return [item for item in data if isinstance(item, LoginItem)]
+        return [item for item in data if isinstance(item, LoginItemModel)]
     elif item_type == "note":
-        return [item for item in data if isinstance(item, SecureNoteItem)]
+        return [item for item in data if isinstance(item, NoteItemModel)]
     return []  # Return empty list if type is invalid
 
 
@@ -144,7 +144,7 @@ def edit_credential(item_id, new_data):
         - new_data (dict): Dictionary containing the fields to update.
 
     Returns:
-        - LoginItem or SecureNoteItem: The updated object.
+        - LoginItemModel or NoteItemModel: The updated object.
         - None: If the item was not found.
     """
     data = load_data()
