@@ -5,7 +5,7 @@ from components.frames.sidebar_frame import SidebarFrame
 from components.frames.items_frame import ItemsFrame
 from components.frames.cru_frame import CRUFrame
 from PIL import Image
-import backend.storage as backend
+from backend.storage import init_appdata
 
 ctk.set_appearance_mode("dark")
 
@@ -13,7 +13,7 @@ ctk.set_appearance_mode("dark")
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        backend.init_appdata()
+        init_appdata()
 
         self.title("Locksmith Password Manager")
         # Set a fixed window size since scaling widgets in Tkinter is a pain to handle
