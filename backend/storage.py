@@ -127,22 +127,13 @@ def filter_by_bin_status(in_bin=True):
     data = load_data()
     return [item for item in data if item.is_in_bin == in_bin]
 
-def return_all_items():
-    """Return all the logins and notes in chronological order."""
+# Return all the logins and notes in chronological order
+def get_all_items():
     data = load_data()
 
-    # Ensure all items have a valid `created_at` field, defaulting to current time if missing
-    for item in data:
-        if not hasattr(item, "created_at") or not isinstance(
-            item.created_at, (int, float)
-        ):
-            item.created_at = time.time()  # Assign current timestamp if missing
-
-    # Sort by created_at (ascending order)
-    sorted_data = sorted(data, key=lambda x: x.created_at)
-
+    # Sort by created_at timestamp in descending order
+    sorted_data = sorted(data, key=lambda x: x.created_at, reverse=True)
     return sorted_data
-
 
 def edit_credential(item_id, new_data):
     """
