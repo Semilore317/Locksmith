@@ -1,7 +1,6 @@
 import customtkinter as ctk
 
 from backend.models import LoginItemModel
-from components.buttons.button import Button
 
 
 class LoginItem(ctk.CTkFrame):
@@ -31,7 +30,7 @@ class LoginItem(ctk.CTkFrame):
         username_label.grid(row=1, column=0, sticky="w")
 
         # Button for viewing the full details of the login item
-        view_button = ctk.CTkButton(
+        view_details_button = ctk.CTkButton(
             self,
             text="View details",
             fg_color="#222222",
@@ -39,4 +38,4 @@ class LoginItem(ctk.CTkFrame):
             font=ctk.CTkFont(family="Inter", size=16),
             command=lambda: print("View Details"),
         )
-        view_button.grid(row=0, column=1, padx=(0, 10), pady=10, sticky="nse")
+        view_details_button.grid(row=0, column=1, padx=(0, 10), pady=10, sticky="nse")
