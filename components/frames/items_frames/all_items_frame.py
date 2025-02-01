@@ -2,6 +2,7 @@ import customtkinter as ctk
 from backend.models import LoginItemModel
 from backend.storage import get_all_items
 from components.frames.items_frames.components.login_item import LoginItem
+from components.frames.items_frames.components.note_item import NoteItem
 
 
 # This frame shows all items (passwords, secure notes, etc.)
@@ -29,6 +30,10 @@ class AllItemsFrame(ctk.CTkFrame):
                     # Display login items
                     login_item = LoginItem(self, login_data=item)
                     login_item.grid(sticky="ew", pady=(6, 0))
+                else:
+                    # Display secure notes
+                    note_item = NoteItem(self, note_data=item, height=80)
+                    note_item.grid(sticky="ew", pady=(6, 0))
         else:
             # If no items have been created, display a message saying so
             no_items_label = ctk.CTkLabel(
