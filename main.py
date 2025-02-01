@@ -37,19 +37,20 @@ class App(ctk.CTk):
 
         # Body
         self.body_frame = ctk.CTkFrame(self, border_width=2)
-        self.body_frame.grid(row=1, column=0, sticky="nsew")
+        # Body grid configuration
         self.body_frame.grid_columnconfigure((1, 2), weight=1)
         self.body_frame.grid_rowconfigure(0, weight=1)
 
+        self.body_frame.grid(row=1, column=0, sticky="nsew")
+
         # Items Frame
-        self.items_frame = ItemsFrame(self.body_frame, width=580)
+        self.items_frame = ItemsFrame(self.body_frame)
         self.items_frame.grid_propagate(False)
         self.items_frame.grid(row=0, column=1, sticky="nsew")
 
         # CRU (Create, Read, Update) Frame
         self.cru_frame = CRUFrame(
             self.body_frame,
-            width=580,
             event_handlers={
                 "on_save": self.items_frame.show_all_items,
                 "on_update": self.items_frame.show_all_items,
