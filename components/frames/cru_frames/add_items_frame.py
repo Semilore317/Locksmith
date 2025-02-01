@@ -1,5 +1,7 @@
 import customtkinter as ctk
 
+from backend.models import LoginItemModel, NoteItemModel
+from backend.storage import save_data
 from components.buttons.button import Button
 from components.frames.cru_frames.components.input_field import InputField
 from components.frames.cru_frames.components.textbox_field import TextboxField
@@ -204,16 +206,12 @@ class AddItemsFrame(ctk.CTkFrame):
         self.current_form = self.add_note_form_frame
         self.current_form.grid(row=2, column=0, sticky="ew", padx=32, pady=(0, 16))
 
-    def __notify_about_errors(self, type):
+    def __notify_about_errors(self, type, message):
         if type == "login":
-            self.login_form_error_label.configure(
-                text="Name and Username are required fields."
-            )
+            self.login_form_error_label.configure(text=message)
             self.after(3000, lambda: self.login_form_error_label.configure(text=""))
         elif type == "note":
-            self.note_form_error_label.configure(
-                text="Name and Content are required fields."
-            )
+            self.note_form_error_label.configure(text=message)
             self.after(3000, lambda: self.note_form_error_label.configure(text=""))
         else:
             print("Unknown type")
@@ -230,12 +228,20 @@ class AddItemsFrame(ctk.CTkFrame):
             inputs_are_valid = False
 
         if inputs_are_valid:
-            # Save the data
-            # TODO
-            self.on_save_event()
+            login_item = LoginItemModel(name=name, username=username, password=password)
+            try:
+                save_data(login_item)
+                self.clear_form("login")
+                self.on_save_event()
+            except Exception as e:
+                self.__notify_about_errors(
+                    "login", f"Error saving login credentials: {e}"
+                )
         else:
             # Show errors in the form
-            self.__notify_about_errors("login")
+            self.__notify_about_errors(
+                "login", "Name and Username are required fields."
+            )
 
     def save_note(self):
         # Validate the inputs, show error if not valid
@@ -248,15 +254,31 @@ class AddItemsFrame(ctk.CTkFrame):
             inputs_are_valid = False
 
         if inputs_are_valid:
-            # Save the data
-            # TODO
+            note_item = NoteItemModel(name=name, note=content)
+            try:
+                save_data(note_item)
+                self.clear_form("note")
+                self.on_save_event()
+            except Exception as e:
+                self.__notify_about_errors("note", f"Error saving note: {e}")
             self.on_save_event()
         else:
             # Show errors in the form
-            self.__notify_about_errors("note")
+            self.__notify_about_errors("note", "Name and Content are required fields.")
 
     def show_password(self):
         if self.password_switch_var.get() == "on":
             self.password_input_field.field_entry.configure(show="")
         else:
             self.password_input_field.field_entry.configure(show="*")
+
+    def clear_form(self, type):
+        if type == "login":
+            self.form_data["login"]["name"].set("")
+            self.form_data["login"]["username"].set("")
+            self.form_data["login"]["password"].set("")
+        elif type == "note":
+            self.form_data["note"]["name"].set("")
+            self.content_textbox_field.field_textbox.delete("0.0", "end")
+        else:
+            raise ValueError("Unknown type")
