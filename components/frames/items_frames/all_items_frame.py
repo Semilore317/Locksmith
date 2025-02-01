@@ -24,7 +24,6 @@ class AllItemsFrame(ctk.CTkFrame):
         # Retrieve items and display them sorted by their time of creation - descending order
         all_items = get_all_items()
         if len(all_items) > 0:
-            # If items are found, display them
             for item in all_items:
                 if isinstance(item, LoginItemModel):
                     # Display login items
