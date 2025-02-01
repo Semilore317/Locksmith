@@ -1,5 +1,10 @@
 from tkinter import PhotoImage
 import customtkinter as ctk
+from backend.models import LoginItemModel, NoteItemModel
+from components.frames.cru_frames.view_credentials_details_frame import (
+    ViewCredentialsDetailsFrame,
+)
+from components.frames.cru_frames.view_note_details_frame import ViewNoteDetailsFrame
 from components.frames.header_frame import HeaderFrame
 from components.frames.sidebar_frame import SidebarFrame
 from components.frames.items_frame import ItemsFrame
@@ -44,7 +49,10 @@ class App(ctk.CTk):
         self.body_frame.grid(row=1, column=0, sticky="nsew")
 
         # Items Frame
-        self.items_frame = ItemsFrame(self.body_frame)
+        self.items_frame = ItemsFrame(
+            self.body_frame,
+            controllers={"view_item_details": self.view_item_details},
+        )
         self.items_frame.grid(row=0, column=1, sticky="nsew")
 
         # CRU (Create, Read, Update) Frame
@@ -52,7 +60,6 @@ class App(ctk.CTk):
             self.body_frame,
             event_handlers={
                 "on_save": self.items_frame.show_all_items,
-                "on_update": self.items_frame.show_all_items,
             },
         )
         self.cru_frame.grid_propagate(False)
@@ -106,6 +113,19 @@ class App(ctk.CTk):
             column=1,
             padx=8,
         )
+
+    def view_item_details(self, item_data):
+        self.cru_frame.destroy()
+        if isinstance(item_data, LoginItemModel):
+            self.cru_frame = ViewCredentialsDetailsFrame(
+                self.body_frame, fg_color="#464646", item=item_data
+            )
+        elif isinstance(item_data, NoteItemModel):
+            self.cru_frame = ViewNoteDetailsFrame(
+                self.body_frame, fg_color="#464646", item=item_data
+            )
+        self.cru_frame.grid_propagate(False)
+        self.cru_frame.grid(row=0, column=2, sticky="nsew")
 
 
 app = App()

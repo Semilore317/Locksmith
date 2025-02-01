@@ -1,13 +1,14 @@
 import customtkinter as ctk
 
-from backend.models import NoteItemModel
+from backend.models import LoginItemModel, NoteItemModel
 from backend.storage import get_items_by_bin_status
 
 
 class BinItemsFrame(ctk.CTkFrame):
-    def __init__(self, master, **kwargs):
+    def __init__(self, master, controllers, **kwargs):
         super().__init__(master, **kwargs)
 
+        self.controllers = controllers
         # Configurations
         self.grid_columnconfigure(0, weight=1)
 
@@ -23,13 +24,17 @@ class BinItemsFrame(ctk.CTkFrame):
         bin_items = get_items_by_bin_status()
         if len(bin_items) > 0:
             for item in bin_items:
-                if isinstance(item, NoteItemModel):
+                if isinstance(item, LoginItemModel):
                     # Display login items
-                    login_item = NoteItemModel(self, login_data=item)
+                    login_item = LoginItemModel(
+                        self, login_data=item, controllers=self.controllers
+                    )
                     login_item.grid(sticky="ew", pady=(6, 0))
                 else:
                     # Display secure notes
-                    note_item = NoteItemModel(self, note_data=item, height=80)
+                    note_item = NoteItemModel(
+                        self, note_data=item, controllers=self.controllers
+                    )
                     note_item.grid(sticky="ew", pady=(6, 0))
         else:
             # If no items have been created, display a message saying so

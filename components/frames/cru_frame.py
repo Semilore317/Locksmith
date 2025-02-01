@@ -9,6 +9,8 @@ class CRUFrame(ctk.CTkFrame):
         super().__init__(master, **kwargs)
 
         self.event_handlers = event_handlers
+        
+        # Configurations
         self.grid_columnconfigure(0, weight=1)
         self.configure(fg_color="#464646")
 

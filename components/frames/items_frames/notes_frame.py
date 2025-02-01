@@ -5,9 +5,10 @@ from components.frames.items_frames.components.note_item import NoteItem
 
 
 class NoteItemsFrame(ctk.CTkFrame):
-    def __init__(self, master, **kwargs):
+    def __init__(self, master, controllers, **kwargs):
         super().__init__(master, **kwargs)
 
+        self.controllers = controllers
         # Configurations
         self.grid_columnconfigure(0, weight=1)
 
@@ -24,7 +25,7 @@ class NoteItemsFrame(ctk.CTkFrame):
         if len(note_items) > 0:
             # Display secure notes
             for item in note_items:
-                note_item = NoteItem(self, note_data=item, height=80)
+                note_item = NoteItem(self, note_data=item, controllers=self.controllers)
                 note_item.grid(sticky="ew", pady=(6, 0))
         else:
             # If no items have been created, display a message saying so

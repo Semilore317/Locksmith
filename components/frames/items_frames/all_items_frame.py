@@ -7,9 +7,10 @@ from components.frames.items_frames.components.note_item import NoteItem
 
 # This frame shows all items (passwords, secure notes, etc.)
 class AllItemsFrame(ctk.CTkFrame):
-    def __init__(self, master, **kwargs):
+    def __init__(self, master, controllers, **kwargs):
         super().__init__(master, **kwargs)
 
+        self.controllers = controllers
         # Configurations
         self.grid_columnconfigure(0, weight=1)
 
@@ -27,11 +28,15 @@ class AllItemsFrame(ctk.CTkFrame):
             for item in all_items:
                 if isinstance(item, LoginItemModel):
                     # Display login items
-                    login_item = LoginItem(self, login_data=item)
+                    login_item = LoginItem(
+                        self, login_data=item, controllers=self.controllers
+                    )
                     login_item.grid(sticky="ew", pady=(6, 0))
                 else:
                     # Display secure notes
-                    note_item = NoteItem(self, note_data=item, height=80)
+                    note_item = NoteItem(
+                        self, note_data=item, controllers=self.controllers
+                    )
                     note_item.grid(sticky="ew", pady=(6, 0))
         else:
             # If no items have been created, display a message saying so

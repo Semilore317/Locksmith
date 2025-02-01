@@ -4,7 +4,7 @@ from backend.models import LoginItemModel
 
 
 class LoginItem(ctk.CTkFrame):
-    def __init__(self, master, login_data: LoginItemModel, **kwargs):
+    def __init__(self, master, login_data: LoginItemModel, controllers, **kwargs):
         super().__init__(master, **kwargs)
 
         # Configurations
@@ -36,6 +36,6 @@ class LoginItem(ctk.CTkFrame):
             fg_color="#222222",
             hover_color="#383838",
             font=ctk.CTkFont(family="Inter", size=16),
-            command=lambda: print("View Details"),
+            command=lambda: controllers["view_item_details"](login_data),
         )
         view_details_button.grid(row=0, column=1, padx=(0, 10), pady=10, sticky="nse")
