@@ -112,8 +112,17 @@ def search_items(keyword):
     return results
 
 
+# Return all the logins and notes in chronological order
+def get_all_items():
+    data = load_data()
+
+    # Sort by created_at timestamp in descending order
+    sorted_data = sorted(data, key=lambda x: x.created_at, reverse=True)
+    return sorted_data
+
+
+# Filter items by type (LoginItemModel or NoteItemModel)
 def filter_by_type(item_type):
-    """Filter items by type (LoginItemModel or NoteItemModel)."""
     data = load_data()
     if item_type == "login":
         return [item for item in data if isinstance(item, LoginItemModel)]
@@ -122,18 +131,10 @@ def filter_by_type(item_type):
     return []  # Return empty list if type is invalid
 
 
-def filter_by_bin_status(in_bin=True):
-    """Filter items based on whether they are in the bin or not."""
-    data = load_data()
-    return [item for item in data if item.is_in_bin == in_bin]
-
-# Return all the logins and notes in chronological order
-def get_all_items():
-    data = load_data()
-
-    # Sort by created_at timestamp in descending order
-    sorted_data = sorted(data, key=lambda x: x.created_at, reverse=True)
-    return sorted_data
+# Filter items based on whether they are in the bin or not
+def get_items_by_bin_status(in_bin=True):
+    all_items = get_all_items()
+    return [item for item in all_items if item.is_in_bin == in_bin]
 
 def edit_credential(item_id, new_data):
     """
