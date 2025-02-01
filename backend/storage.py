@@ -122,7 +122,7 @@ def get_all_items():
 
 
 # Filter items by type (LoginItemModel or NoteItemModel)
-def filter_by_type(item_type):
+def get_items_by_type(item_type):
     data = load_data()
     if item_type == "login":
         return [item for item in data if isinstance(item, LoginItemModel)]
@@ -135,6 +135,7 @@ def filter_by_type(item_type):
 def get_items_by_bin_status(in_bin=True):
     all_items = get_all_items()
     return [item for item in all_items if item.is_in_bin == in_bin]
+
 
 def edit_credential(item_id, new_data):
     """
