@@ -5,7 +5,7 @@ from components.frames.items_frames.logins_frame import LoginItemsFrame
 from components.frames.items_frames.notes_frame import NoteItemsFrame
 
 
-class ItemsFrame(ctk.CTkFrame):
+class ItemsFrame(ctk.CTkScrollableFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 

@@ -45,7 +45,6 @@ class App(ctk.CTk):
 
         # Items Frame
         self.items_frame = ItemsFrame(self.body_frame)
-        self.items_frame.grid_propagate(False)
         self.items_frame.grid(row=0, column=1, sticky="nsew")
 
         # CRU (Create, Read, Update) Frame
