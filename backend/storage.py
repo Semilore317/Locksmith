@@ -123,7 +123,7 @@ def get_all_items():
 
 # Filter items by type (LoginItemModel or NoteItemModel)
 def get_items_by_type(item_type):
-    data = load_data()
+    data = get_all_items()
     if item_type == "login":
         return [item for item in data if isinstance(item, LoginItemModel)]
     elif item_type == "note":
