@@ -1,5 +1,8 @@
 import customtkinter as ctk
 
+from backend.storage import get_items_by_type
+from components.frames.items_frames.components.login_item import LoginItem
+
 
 class LoginItemsFrame(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
@@ -17,10 +20,12 @@ class LoginItemsFrame(ctk.CTkFrame):
         title_label.grid(row=0, column=0, sticky="ew")
 
         # Retrieve items and display them sorted by timestamp - descending order
-        all_items = []
-        if len(all_items) > 0:
-            # If items are found, display them
-            pass
+        login_items = get_items_by_type("login")
+        if len(login_items) > 0:
+            # Display login items
+            for item in login_items:
+                login_item = LoginItem(self, login_data=item)
+                login_item.grid(sticky="ew", pady=(6, 0))
         else:
             # If no items have been created, display a message saying so
             no_items_label = ctk.CTkLabel(

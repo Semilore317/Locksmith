@@ -1,5 +1,8 @@
 import customtkinter as ctk
 
+from backend.storage import get_items_by_type
+from components.frames.items_frames.components.note_item import NoteItem
+
 
 class NoteItemsFrame(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
@@ -17,10 +20,12 @@ class NoteItemsFrame(ctk.CTkFrame):
         title_label.grid(row=0, column=0, sticky="ew")
 
         # Retrieve items and display them sorted by timestamp - descending order
-        all_items = []
-        if len(all_items) > 0:
-            # If items are found, display them
-            pass
+        note_items = get_items_by_type("note")
+        if len(note_items) > 0:
+            # Display secure notes
+            for item in note_items:
+                note_item = NoteItem(self, note_data=item, height=80)
+                note_item.grid(sticky="ew", pady=(6, 0))
         else:
             # If no items have been created, display a message saying so
             no_items_label = ctk.CTkLabel(
