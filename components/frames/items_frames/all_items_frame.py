@@ -1,4 +1,7 @@
 import customtkinter as ctk
+from backend.models import LoginItemModel
+from backend.storage import get_all_items
+from components.frames.items_frames.components.login_item import LoginItem
 
 
 # This frame shows all items (passwords, secure notes, etc.)
@@ -17,11 +20,15 @@ class AllItemsFrame(ctk.CTkFrame):
         )
         title_label.grid(row=0, column=0, sticky="ew")
 
-        # Retrieve items and display them sorted by timestamp - descending order
-        all_items = []
+        # Retrieve items and display them sorted by their time of creation - descending order
+        all_items = get_all_items()
         if len(all_items) > 0:
             # If items are found, display them
-            pass
+            for item in all_items:
+                if isinstance(item, LoginItemModel):
+                    # Display login items
+                    login_item = LoginItem(self, login_data=item)
+                    login_item.grid(sticky="ew", pady=(6, 0))
         else:
             # If no items have been created, display a message saying so
             no_items_label = ctk.CTkLabel(
