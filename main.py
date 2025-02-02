@@ -1,6 +1,7 @@
 from tkinter import PhotoImage
 import customtkinter as ctk
 from backend.models import LoginItemModel, NoteItemModel
+from components.frames.cru_frames.add_items_frame import AddItemsFrame
 from components.frames.cru_frames.view_credentials_details_frame import (
     ViewCredentialsDetailsFrame,
 )
@@ -8,7 +9,6 @@ from components.frames.cru_frames.view_note_details_frame import ViewNoteDetails
 from components.frames.header_frame import HeaderFrame
 from components.frames.sidebar_frame import SidebarFrame
 from components.frames.items_frame import ItemsFrame
-from components.frames.cru_frame import CRUFrame
 from PIL import Image
 from backend.storage import init_appdata
 
@@ -56,13 +56,19 @@ class App(ctk.CTk):
         self.items_frame.grid(row=0, column=1, sticky="nsew")
 
         # CRU (Create, Read, Update) Frame
-        self.cru_frame = CRUFrame(
-            self.body_frame,
+        self.cru_frame = ctk.CTkFrame(self.body_frame, fg_color="#464646")
+        self.cru_frame.grid_columnconfigure(0, weight=1)
+
+        add_items_frame = AddItemsFrame(
+            self.cru_frame,
+            fg_color="#464646",
             event_handlers={
                 "on_save": self.items_frame.show_all_items,
             },
         )
+
         self.cru_frame.grid_propagate(False)
+        add_items_frame.grid(row=0, column=0, sticky="nsew")
         self.cru_frame.grid(row=0, column=2, sticky="nsew")
 
         # Sidebar
@@ -70,6 +76,7 @@ class App(ctk.CTk):
             self.body_frame,
             width=180,
             controllers={
+                "show_add_items": self.show_add_items_frame,
                 "show_all_items": self.items_frame.show_all_items,
                 "show_bin_items": self.items_frame.show_bin_items,
                 "show_logins": self.items_frame.show_logins,
@@ -115,21 +122,31 @@ class App(ctk.CTk):
         )
 
     def view_item_details(self, item_data):
-        self.cru_frame.destroy()
+        self.cru_frame.grid_remove()
         if isinstance(item_data, LoginItemModel):
-            self.cru_frame = ViewCredentialsDetailsFrame(
-                self.body_frame, fg_color="#464646", item=item_data
+            view_items_frame = ViewCredentialsDetailsFrame(
+                self.cru_frame, fg_color="#464646", item=item_data
             )
+            view_items_frame.grid(row=0, column=0, sticky="nsew")
         elif isinstance(item_data, NoteItemModel):
-            # Odd fix for a weird resizing bug
-            self.test_frame = ctk.CTkFrame(self.body_frame)
-            self.test_frame.grid_columnconfigure(0, weight=1)
             note_details_frame = ViewNoteDetailsFrame(
-                self.test_frame, fg_color="#464646", item=item_data
+                self.cru_frame, fg_color="#464646", item=item_data
             )
             note_details_frame.grid(row=0, column=0, sticky="nsew")
-            self.cru_frame = self.test_frame
         self.cru_frame.grid_propagate(False)
+        self.cru_frame.grid(row=0, column=2, sticky="nsew")
+
+    def show_add_items_frame(self):
+        self.cru_frame.grid_remove()
+        add_items_frame = AddItemsFrame(
+            self.cru_frame,
+            fg_color="#464646",
+            event_handlers={
+                "on_save": self.items_frame.show_all_items,
+            },
+        )
+        self.cru_frame.grid_propagate(False)
+        add_items_frame.grid(row=0, column=0, sticky="nsew")
         self.cru_frame.grid(row=0, column=2, sticky="nsew")
 
 

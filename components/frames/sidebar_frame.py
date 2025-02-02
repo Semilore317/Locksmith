@@ -17,6 +17,19 @@ class SidebarFrame(ctk.CTkFrame):
         # Define a smaller font size for the buttons
         button_font = ctk.CTkFont(size=14, weight="bold")
 
+        # Add Items Button
+        add_items_button = ctk.CTkButton(
+            self,
+            width=self.BUTTON_WIDTH,
+            height=self.BUTTON_HEIGHT,
+            corner_radius=self.BUTTON_CORNER_RADIUS,
+            fg_color="#402590",
+            hover_color="#341E76",
+            text="Add Item",
+            font=button_font,
+            command=controllers["show_add_items"],
+        )
+
         # All Items Button
         all_items_button = Button(
             self,
@@ -71,10 +84,11 @@ class SidebarFrame(ctk.CTkFrame):
         )
 
         # Layout the elements with reduced padding and width
-        all_items_button.grid(row=1, column=0, pady=(30, 10))
-        bin_button.grid(row=2, column=0, pady=(20, 10), padx=15)
+        add_items_button.grid(row=1, column=0, pady=(30, 10))
+        all_items_button.grid(row=2, column=0, pady=(30, 10))
+        bin_button.grid(row=3, column=0, pady=(20, 10), padx=15)
 
-        types_label.grid(row=3, column=0, pady=(50, 20), padx=15, sticky="w")
+        types_label.grid(row=4, column=0, pady=(50, 20), padx=15, sticky="w")
 
-        login_button.grid(row=4, column=0, pady=(10, 10), padx=15)
-        secure_note_button.grid(row=5, column=0, pady=(10, 20), padx=15)
+        login_button.grid(row=5, column=0, pady=(10, 10), padx=15)
+        secure_note_button.grid(row=6, column=0, pady=(10, 20), padx=15)
