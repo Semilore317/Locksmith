@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 from backend.models import LoginItemModel, NoteItemModel
-from backend.storage import save_data
+from backend.storage import save_item
 from components.buttons.button import Button
 from components.frames.cru_frames.components.input_field import InputField
 from components.frames.cru_frames.components.textbox_field import TextboxField
@@ -230,7 +230,7 @@ class AddItemsFrame(ctk.CTkFrame):
         if inputs_are_valid:
             login_item = LoginItemModel(name=name, username=username, password=password)
             try:
-                save_data(login_item)
+                save_item(login_item)
                 self.clear_form("login")
                 self.on_save_event()
             except Exception as e:
@@ -256,7 +256,7 @@ class AddItemsFrame(ctk.CTkFrame):
         if inputs_are_valid:
             note_item = NoteItemModel(name=name, note=content)
             try:
-                save_data(note_item)
+                save_item(note_item)
                 self.clear_form("note")
                 self.on_save_event()
             except Exception as e:

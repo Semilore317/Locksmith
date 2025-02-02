@@ -7,14 +7,13 @@ from components.frames.cru_frames.components.input_field import InputField
 from components.frames.cru_frames.components.textbox_field import TextboxField
 
 
-class ViewNoteDetailsFrame(ctk.CTkFrame):
+class EditNoteDetailsFrame(ctk.CTkFrame):
     def __init__(self, master, item: NoteItemModel, event_handlers, **kwargs):
         super().__init__(master, **kwargs)
 
         self.item = item
         self.on_update_event = event_handlers["on_update"]
-        self.on_delete_event = event_handlers["on_delete"]
-        self.update_note = event_handlers["on_edit_btn_clicked"]
+        self.on_cancel_event = event_handlers["on_cancel"]
 
         note_item_data = item.get_decrypted_data()
         self.form_data = {
@@ -41,7 +40,6 @@ class ViewNoteDetailsFrame(ctk.CTkFrame):
             self.note_form_frame,
             label="Name*",
             text_var=self.form_data["note"]["name"],
-            is_readonly=True,
         )
 
         self.content_textbox_field = TextboxField(
@@ -49,7 +47,6 @@ class ViewNoteDetailsFrame(ctk.CTkFrame):
             label="Content*",
         )
         self.content_textbox_field.field_textbox.insert("0.0", note_item_data["note"])
-        self.content_textbox_field.field_textbox.configure(state="disabled")
 
         self.note_form_error_label = ctk.CTkLabel(
             self.note_form_frame,
@@ -58,37 +55,25 @@ class ViewNoteDetailsFrame(ctk.CTkFrame):
             text_color="#C92929",
         )
 
-        edit_note_button = Button(
+        update_btn = Button(
             self.note_form_frame,
-            text="Edit",
+            text="Update",
             corner_radius=2,
             font=ctk.CTkFont(family="Inter", size=16),
             height=45,
-            command=lambda: self.update_note(self.item),
+            command=self.update_note,
         )
 
-        self.delete_btn = ctk.CTkButton(
+        cancel_update_btn = ctk.CTkButton(
             self.note_form_frame,
-            text="Move to Bin",
+            text="Cancel",
             corner_radius=2,
             font=ctk.CTkFont(family="Inter", size=16),
             height=45,
             fg_color="#761E1E",
             hover_color="#631A1A",
-            command=self.move_to_bin,
+            command=lambda: self.on_cancel_event(self.item),
         )
-
-        if self.item.is_in_bin:
-            self.delete_btn = ctk.CTkButton(
-                self.note_form_frame,
-                text="Delete Permanently",
-                corner_radius=2,
-                font=ctk.CTkFont(family="Inter", size=16),
-                height=45,
-                fg_color="#761E1E",
-                hover_color="#631A1A",
-                command=self.delete_permanently,
-            )
 
         # Grid placement for secure note form items
         self.note_form_frame.grid(row=2, column=0, sticky="ew", padx=32, pady=(0, 16))
@@ -97,12 +82,36 @@ class ViewNoteDetailsFrame(ctk.CTkFrame):
             row=1, column=0, sticky="ew", padx=6, pady=(4, 0)
         )
         self.note_form_error_label.grid(row=2, column=0, sticky="w", padx=6)
-        edit_note_button.grid(row=5, column=0, sticky="ew", padx=6, pady=(0, 6))
-        self.delete_btn.grid(row=6, column=0, sticky="ew", padx=6, pady=(0, 6))
+        update_btn.grid(row=3, column=0, sticky="ew", padx=6, pady=(0, 6))
+        cancel_update_btn.grid(row=4, column=0, sticky="ew", padx=6, pady=(0, 6))
 
     def __notify_about_errors(self, message):
         self.note_form_error_label.configure(text=message)
         self.after(3000, lambda: self.note_form_error_label.configure(text=""))
+
+    def get_form_values(self):
+        name = self.form_data["note"]["name"].get().strip()
+        content = self.content_textbox_field.get_content().strip()
+        return {"name": name, "note": content}
+
+    def update_note(self):
+        # Validate the inputs, show error if not valid
+        # Save if all inputs are valid
+        form_values = self.get_form_values()
+        inputs_are_valid = True
+
+        if len(form_values["name"]) == 0 or len(form_values["note"]) == 0:
+            inputs_are_valid = False
+
+        if inputs_are_valid:
+            try:
+                update_item(self.item.id, form_values)
+                self.on_update_event()
+            except Exception as e:
+                self.__notify_about_errors("login", f"Error updating note: {e}")
+        else:
+            # Show errors in the form
+            self.__notify_about_errors("login", "Name and Content are required fields.")
 
     def move_to_bin(self):
         try:

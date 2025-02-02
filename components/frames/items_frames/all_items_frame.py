@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from backend.models import LoginItemModel
-from backend.storage import get_all_items
+from backend.storage import get_items_by_bin_status
 from components.frames.items_frames.components.login_item import LoginItem
 from components.frames.items_frames.components.note_item import NoteItem
 
@@ -23,7 +23,7 @@ class AllItemsFrame(ctk.CTkFrame):
         title_label.grid(row=0, column=0, sticky="ew")
 
         # Retrieve items and display them sorted by their time of creation - descending order
-        all_items = get_all_items()
+        all_items = get_items_by_bin_status(False)
         if len(all_items) > 0:
             for item in all_items:
                 if isinstance(item, LoginItemModel):

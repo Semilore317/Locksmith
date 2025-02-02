@@ -22,9 +22,11 @@ class LoginItemsFrame(ctk.CTkFrame):
 
         # Retrieve items and display them sorted by timestamp - descending order
         login_items = get_items_by_type("login")
-        if len(login_items) > 0:
+        items_not_in_bin = [item for item in login_items if item.is_in_bin == False]
+
+        if len(items_not_in_bin) > 0:
             # Display login items
-            for item in login_items:
+            for item in items_not_in_bin:
                 login_item = LoginItem(
                     self, login_data=item, controllers=self.controllers
                 )

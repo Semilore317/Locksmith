@@ -2,6 +2,8 @@ import customtkinter as ctk
 
 from backend.models import LoginItemModel, NoteItemModel
 from backend.storage import get_items_by_bin_status
+from components.frames.items_frames.components.login_item import LoginItem
+from components.frames.items_frames.components.note_item import NoteItem
 
 
 class BinItemsFrame(ctk.CTkFrame):
@@ -26,13 +28,13 @@ class BinItemsFrame(ctk.CTkFrame):
             for item in bin_items:
                 if isinstance(item, LoginItemModel):
                     # Display login items
-                    login_item = LoginItemModel(
+                    login_item = LoginItem(
                         self, login_data=item, controllers=self.controllers
                     )
                     login_item.grid(sticky="ew", pady=(6, 0))
                 else:
                     # Display secure notes
-                    note_item = NoteItemModel(
+                    note_item = NoteItem(
                         self, note_data=item, controllers=self.controllers
                     )
                     note_item.grid(sticky="ew", pady=(6, 0))

@@ -22,9 +22,11 @@ class NoteItemsFrame(ctk.CTkFrame):
 
         # Retrieve items and display them sorted by timestamp - descending order
         note_items = get_items_by_type("note")
-        if len(note_items) > 0:
+        items_not_in_bin = [item for item in note_items if item.is_in_bin == False]
+
+        if len(items_not_in_bin) > 0:
             # Display secure notes
-            for item in note_items:
+            for item in items_not_in_bin:
                 note_item = NoteItem(self, note_data=item, controllers=self.controllers)
                 note_item.grid(sticky="ew", pady=(6, 0))
         else:

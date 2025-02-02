@@ -1,9 +1,9 @@
 import json
 import os
-import time
 from backend.models import LoginItemModel, NoteItemModel
 
 DATA_FILE = "appdata/data.json"
+
 
 def init_appdata():
     if not os.path.exists("appdata"):
@@ -12,6 +12,7 @@ def init_appdata():
     if not os.path.exists(DATA_FILE):
         with open(DATA_FILE, "w") as file:
             json.dump([], file)
+
 
 # Load saved login credentials and notes from JSON file
 def load_data():
@@ -47,7 +48,9 @@ Load saved login credentials and notes from JSON file.
 Parse them and add new item to the parsed list
 Save the list back to the JSON file.
 """
-def save_data(data: LoginItemModel | NoteItemModel):
+
+
+def save_item(data: LoginItemModel | NoteItemModel):
     # Check if the data is a valid LoginItemModel or NoteItemModel object
     if not isinstance(data, (LoginItemModel, NoteItemModel)):
         raise Exception(
@@ -65,34 +68,35 @@ def save_data(data: LoginItemModel | NoteItemModel):
         print("Item already exists")
 
 
-def delete_permanently(item_id):
-    """Completely remove an item from the JSON file."""
-    data = load_data()
+def update_item(id: str, new_data):
+    all_items = get_all_items()
+    # Update only provided fields
+    for i in range(len(all_items)):
+        item = all_items[i]
+        if item.id == id:
+            for key, value in new_data.items():
+                if hasattr(item, key):
+                    setattr(item, key, value)
+            all_items[i] = item
+            with open(DATA_FILE, "w", encoding="utf-8") as file:
+                json.dump([item.get_raw_data() for item in all_items], file, indent=4)
+            return item
+    raise Exception("Item with specified ID not found")
+
+
+# Completely remove an item from the JSON file
+def delete_permanently(id: str):
+    all_items = get_all_items()
 
     # Ensure IDs are strings for correct comparison
-    item_id = str(item_id)
+    item_id = str(id)
 
-    new_data = [item for item in data if str(item.id) != item_id]  # Match ID exactly
-    if len(new_data) == len(data):
-        return False  # No item was deleted (ID not found)
-
-    save_data(new_data)
-    return True  # Successfully deleted
-
-
-def move_to_bin(item_id):
-    """Move an item to the bin (soft delete)."""
-    data = load_data()
-
-    item_id = str(item_id)  # Ensure IDs are stored as strings
-
-    for item in data:
-        if str(item.id) == item_id:
-            item.is_in_bin = True  # Mark item as "in bin"
-            save_data(data)
-            return True  # Successfully moved to bin
-
-    return False  # Item not found
+    new_items = [item for item in all_items if str(item.id) != item_id]
+    if len(all_items) == len(new_items):
+        raise Exception("No item was deleted (ID not found)")
+    with open(DATA_FILE, "w", encoding="utf-8") as file:
+        json.dump([item.get_raw_data() for item in new_items], file, indent=4)
+    return True
 
 
 def search_items(keyword):
@@ -135,31 +139,3 @@ def get_items_by_type(item_type):
 def get_items_by_bin_status(in_bin=True):
     all_items = get_all_items()
     return [item for item in all_items if item.is_in_bin == in_bin]
-
-
-def edit_credential(item_id, new_data):
-    """
-    Edit an existing login credential or secure note.
-
-    Parameters:
-        - item_id (str): The unique ID of the item to edit.
-        - new_data (dict): Dictionary containing the fields to update.
-
-    Returns:
-        - LoginItemModel or NoteItemModel: The updated object.
-        - None: If the item was not found.
-    """
-    data = load_data()
-    item_id = str(item_id)
-
-    for item in data:
-        if str(item.id) == item_id:
-            # Update only provided fields
-            for key, value in new_data.items():
-                if hasattr(item, key):
-                    setattr(item, key, value)
-
-            save_data(data)  # Save changes to file
-            return item  # Return updated object
-
-    return None  # Item not found

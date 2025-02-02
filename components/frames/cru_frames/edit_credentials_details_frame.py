@@ -6,14 +6,13 @@ from components.buttons.button import Button
 from components.frames.cru_frames.components.input_field import InputField
 
 
-class ViewCredentialsDetailsFrame(ctk.CTkFrame):
+class EditCredentialsDetailsFrame(ctk.CTkFrame):
     def __init__(self, master, item: LoginItemModel, event_handlers, **kwargs):
         super().__init__(master, **kwargs)
 
         self.item = item
         self.on_update_event = event_handlers["on_update"]
-        self.on_delete_event = event_handlers["on_delete"]
-        self.update_login_credentials = event_handlers["on_edit_btn_clicked"]
+        self.on_cancel_event = event_handlers["on_cancel"]
 
         login_item_data = item.get_decrypted_data()
         self.form_data = {
@@ -43,21 +42,18 @@ class ViewCredentialsDetailsFrame(ctk.CTkFrame):
             self.login_form_frame,
             "Name*",
             text_var=self.form_data["login"]["name"],
-            is_readonly=True,
         )
 
         username_input_field = InputField(
             self.login_form_frame,
             "Username*",
             text_var=self.form_data["login"]["username"],
-            is_readonly=True,
         )
 
         self.password_input_field = InputField(
             self.login_form_frame,
             "Password",
             text_var=self.form_data["login"]["password"],
-            is_readonly=True,
         )
         self.password_input_field.field_entry.configure(show="*")
 
@@ -78,37 +74,25 @@ class ViewCredentialsDetailsFrame(ctk.CTkFrame):
             text_color="#C92929",
         )
 
-        edit_credentials_button = Button(
+        update_btn = Button(
             self.login_form_frame,
-            text="Edit",
+            text="Update",
             corner_radius=2,
             font=ctk.CTkFont(family="Inter", size=16),
             height=45,
-            command=lambda: self.update_login_credentials(self.item),
+            command=self.update_login_credential,
         )
 
-        self.delete_btn = ctk.CTkButton(
+        cancel_update_btn = ctk.CTkButton(
             self.login_form_frame,
-            text="Move to Bin",
+            text="Cancel",
             corner_radius=2,
             font=ctk.CTkFont(family="Inter", size=16),
             height=45,
             fg_color="#761E1E",
             hover_color="#631A1A",
-            command=self.move_to_bin,
+            command=lambda: self.on_cancel_event(self.item),
         )
-
-        if self.item.is_in_bin:
-            self.delete_btn = ctk.CTkButton(
-                self.login_form_frame,
-                text="Delete Permanently",
-                corner_radius=2,
-                font=ctk.CTkFont(family="Inter", size=16),
-                height=45,
-                fg_color="#761E1E",
-                hover_color="#631A1A",
-                command=self.delete_permanently,
-            )
 
         # Grid placement for login credentials form items
         self.login_form_frame.grid(row=2, column=0, sticky="ew", padx=32, pady=(0, 16))
@@ -120,26 +104,41 @@ class ViewCredentialsDetailsFrame(ctk.CTkFrame):
         )
         show_password_switch.grid(row=3, column=0, sticky="w", padx=6)
         self.login_form_error_label.grid(row=4, column=0, sticky="w", padx=6)
-        edit_credentials_button.grid(row=5, column=0, sticky="ew", padx=6, pady=(0, 6))
-        self.delete_btn.grid(row=6, column=0, sticky="ew", padx=6, pady=(0, 6))
+        update_btn.grid(row=5, column=0, sticky="ew", padx=6, pady=(0, 6))
+        cancel_update_btn.grid(row=6, column=0, sticky="ew", padx=6, pady=(0, 6))
+
+    def get_form_values(self):
+        name = self.form_data["login"]["name"].get().strip()
+        username = self.form_data["login"]["username"].get().strip()
+        password = self.form_data["login"]["password"].get().strip()
+        return {"name": name, "username": username, "password": password}
 
     def __notify_about_errors(self, message):
         self.login_form_error_label.configure(text=message)
         self.after(3000, lambda: self.login_form_error_label.configure(text=""))
 
-    def move_to_bin(self):
-        try:
-            update_item(self.item.id, {"is_in_bin": True})
-            self.on_update_event()
-        except Exception as e:
-            self.__notify_about_errors(f"Failed to move item to bin: {e}")
+    def update_login_credential(self):
+        # Validate the inputs, show error if not valid
+        # Save if all inputs are valid
+        form_values = self.get_form_values()
+        inputs_are_valid = True
 
-    def delete_permanently(self):
-        try:
-            delete_permanently(self.item.id)
-            self.on_delete_event()
-        except Exception as e:
-            self.__notify_about_errors(f"Failed to delete item: {e}")
+        if len(form_values["name"]) == 0 or len(form_values["username"]) == 0:
+            inputs_are_valid = False
+
+        if inputs_are_valid:
+            try:
+                update_item(self.item.id, form_values)
+                self.on_update_event()
+            except Exception as e:
+                self.__notify_about_errors(
+                    "login", f"Error updating login credentials: {e}"
+                )
+        else:
+            # Show errors in the form
+            self.__notify_about_errors(
+                "login", "Name and Username are required fields."
+            )
 
     def show_password(self):
         if self.password_switch_var.get() == "on":
