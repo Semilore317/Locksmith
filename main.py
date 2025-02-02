@@ -2,6 +2,10 @@ from tkinter import PhotoImage
 import customtkinter as ctk
 from backend.models import LoginItemModel, NoteItemModel
 from components.frames.cru_frames.add_items_frame import AddItemsFrame
+from components.frames.cru_frames.edit_credentials_details_frame import (
+    EditCredentialsDetailsFrame,
+)
+from components.frames.cru_frames.edit_note_details_frame import EditNoteDetailsFrame
 from components.frames.cru_frames.view_credentials_details_frame import (
     ViewCredentialsDetailsFrame,
 )
@@ -139,6 +143,7 @@ class App(ctk.CTk):
                 event_handlers={
                     "on_update": self.refresh,
                     "on_delete": self.on_delete_event,
+                    "on_edit_btn_clicked": self.show_edit_items_frame,
                 },
             )
             view_items_frame.grid(row=0, column=0, sticky="nsew")
@@ -150,6 +155,7 @@ class App(ctk.CTk):
                 event_handlers={
                     "on_update": self.refresh,
                     "on_delete": self.on_delete_event,
+                    "on_edit_btn_clicked": self.show_edit_items_frame,
                 },
             )
             note_details_frame.grid(row=0, column=0, sticky="nsew")
@@ -167,6 +173,33 @@ class App(ctk.CTk):
         )
         self.cru_frame.grid_propagate(False)
         add_items_frame.grid(row=0, column=0, sticky="nsew")
+        self.cru_frame.grid(row=0, column=2, sticky="nsew")
+
+    def show_edit_items_frame(self, item_data):
+        self.cru_frame.grid_remove()
+        if isinstance(item_data, LoginItemModel):
+            view_items_frame = EditCredentialsDetailsFrame(
+                self.cru_frame,
+                fg_color="#464646",
+                item=item_data,
+                event_handlers={
+                    "on_update": self.refresh,
+                    "on_cancel": self.view_item_details,
+                },
+            )
+            view_items_frame.grid(row=0, column=0, sticky="nsew")
+        elif isinstance(item_data, NoteItemModel):
+            note_details_frame = EditNoteDetailsFrame(
+                self.cru_frame,
+                fg_color="#464646",
+                item=item_data,
+                event_handlers={
+                    "on_update": self.refresh,
+                    "on_cancel": self.view_item_details,
+                },
+            )
+            note_details_frame.grid(row=0, column=0, sticky="nsew")
+        self.cru_frame.grid_propagate(False)
         self.cru_frame.grid(row=0, column=2, sticky="nsew")
 
 
