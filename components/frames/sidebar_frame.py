@@ -3,8 +3,11 @@ from components.buttons.button import Button
 
 
 class SidebarFrame(ctk.CTkFrame):
-    def __init__(self, master, **kwargs):
+    def __init__(self, master, controllers, **kwargs):
         super().__init__(master, **kwargs)
+
+        # Configurations
+        self.configure(fg_color="#222222")
 
         # Define some constants for the sidebar components
         self.BUTTON_WIDTH = 140
@@ -14,6 +17,19 @@ class SidebarFrame(ctk.CTkFrame):
         # Define a smaller font size for the buttons
         button_font = ctk.CTkFont(size=14, weight="bold")
 
+        # Add Items Button
+        add_items_button = ctk.CTkButton(
+            self,
+            width=self.BUTTON_WIDTH,
+            height=self.BUTTON_HEIGHT,
+            corner_radius=self.BUTTON_CORNER_RADIUS,
+            fg_color="#402590",
+            hover_color="#341E76",
+            text="Add Item",
+            font=button_font,
+            command=controllers["show_add_items"],
+        )
+
         # All Items Button
         all_items_button = Button(
             self,
@@ -22,6 +38,7 @@ class SidebarFrame(ctk.CTkFrame):
             corner_radius=self.BUTTON_CORNER_RADIUS,
             text="All Items",
             font=button_font,
+            command=controllers["show_all_items"],
         )
 
         # Bin Button
@@ -32,6 +49,7 @@ class SidebarFrame(ctk.CTkFrame):
             height=self.BUTTON_HEIGHT,
             corner_radius=self.BUTTON_CORNER_RADIUS,
             font=button_font,
+            command=controllers["show_bin_items"],
         )
 
         # Section Label ("Types")
@@ -46,28 +64,31 @@ class SidebarFrame(ctk.CTkFrame):
         # Login Button
         login_button = Button(
             self,
-            text="Login",
+            text="Logins",
             width=self.BUTTON_WIDTH,
             height=self.BUTTON_HEIGHT,
             corner_radius=self.BUTTON_CORNER_RADIUS,
             font=button_font,
+            command=controllers["show_logins"],
         )
 
         # Secure Note Button
         secure_note_button = Button(
             self,
-            text="Secure Note",
+            text="Secure Notes",
             width=self.BUTTON_WIDTH,
             height=self.BUTTON_HEIGHT,
             corner_radius=self.BUTTON_CORNER_RADIUS,
             font=button_font,
+            command=controllers["show_notes"],
         )
 
         # Layout the elements with reduced padding and width
-        all_items_button.grid(row=1, column=0, pady=(30, 10))
-        bin_button.grid(row=2, column=0, pady=(20, 10), padx=15)
+        add_items_button.grid(row=1, column=0, pady=(30, 10))
+        all_items_button.grid(row=2, column=0, pady=(30, 10))
+        bin_button.grid(row=3, column=0, pady=(20, 10), padx=15)
 
-        types_label.grid(row=3, column=0, pady=(50, 20), padx=15, sticky="w")
+        types_label.grid(row=4, column=0, pady=(50, 20), padx=15, sticky="w")
 
-        login_button.grid(row=4, column=0, pady=(10, 10), padx=15)
-        secure_note_button.grid(row=5, column=0, pady=(10, 20), padx=15)
+        login_button.grid(row=5, column=0, pady=(10, 10), padx=15)
+        secure_note_button.grid(row=6, column=0, pady=(10, 20), padx=15)
