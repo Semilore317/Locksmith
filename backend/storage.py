@@ -84,19 +84,19 @@ def update_item(id: str, new_data):
     raise Exception("Item with specified ID not found")
 
 
-def delete_permanently(item_id):
-    """Completely remove an item from the JSON file."""
-    data = load_data()
+# Completely remove an item from the JSON file
+def delete_permanently(id: str):
+    all_items = get_all_items()
 
     # Ensure IDs are strings for correct comparison
-    item_id = str(item_id)
+    item_id = str(id)
 
-    new_data = [item for item in data if str(item.id) != item_id]  # Match ID exactly
-    if len(new_data) == len(data):
-        return False  # No item was deleted (ID not found)
-
-    save_item(new_data)
-    return True  # Successfully deleted
+    new_items = [item for item in all_items if str(item.id) != item_id]
+    if len(all_items) == len(new_items):
+        raise Exception("No item was deleted (ID not found)")
+    with open(DATA_FILE, "w", encoding="utf-8") as file:
+        json.dump([item.get_raw_data() for item in new_items], file, indent=4)
+    return True
 
 
 def search_items(keyword):

@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 from backend.models import LoginItemModel
-from backend.storage import update_item
+from backend.storage import delete_permanently, update_item
 from components.buttons.button import Button
 from components.frames.cru_frames.components.input_field import InputField
 
@@ -12,6 +12,8 @@ class ViewCredentialsDetailsFrame(ctk.CTkFrame):
 
         self.item = item
         self.on_update_event = event_handlers["on_update"]
+        self.on_delete_event = event_handlers["on_delete"]
+
         login_item_data = item.get_decrypted_data()
         self.form_data = {
             "login": {
@@ -84,7 +86,7 @@ class ViewCredentialsDetailsFrame(ctk.CTkFrame):
             command=self.update_login_credentials,
         )
 
-        softdelete_credentials_button = Button(
+        self.delete_btn = Button(
             self.login_form_frame,
             text="Move to Bin",
             corner_radius=2,
@@ -92,6 +94,16 @@ class ViewCredentialsDetailsFrame(ctk.CTkFrame):
             height=45,
             command=self.move_to_bin,
         )
+
+        if self.item.is_in_bin:
+            self.delete_btn = Button(
+                self.login_form_frame,
+                text="Delete Permanently",
+                corner_radius=2,
+                font=ctk.CTkFont(family="Inter", size=16),
+                height=45,
+                command=self.delete_permanently,
+            )
 
         # Grid placement for login credentials form items
         self.login_form_frame.grid(row=2, column=0, sticky="ew", padx=32, pady=(0, 16))
@@ -104,9 +116,7 @@ class ViewCredentialsDetailsFrame(ctk.CTkFrame):
         show_password_switch.grid(row=3, column=0, sticky="w", padx=6)
         self.login_form_error_label.grid(row=4, column=0, sticky="w", padx=6)
         edit_credentials_button.grid(row=5, column=0, sticky="ew", padx=6, pady=(0, 6))
-        softdelete_credentials_button.grid(
-            row=6, column=0, sticky="ew", padx=6, pady=(0, 6)
-        )
+        self.delete_btn.grid(row=6, column=0, sticky="ew", padx=6, pady=(0, 6))
 
     def get_form_values(self):
         name = self.form_data["login"]["name"].get().strip()
@@ -127,6 +137,13 @@ class ViewCredentialsDetailsFrame(ctk.CTkFrame):
             self.on_update_event()
         except Exception as e:
             self.__notify_about_errors(f"Failed to move item to bin: {e}")
+
+    def delete_permanently(self):
+        try:
+            delete_permanently(self.item.id)
+            self.on_delete_event()
+        except Exception as e:
+            self.__notify_about_errors(f"Failed to delete item: {e}")
 
     def show_password(self):
         if self.password_switch_var.get() == "on":

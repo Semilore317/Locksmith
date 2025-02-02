@@ -121,7 +121,7 @@ class App(ctk.CTk):
             padx=8,
         )
 
-    def on_update_event(self):
+    def refresh(self):
         self.show_add_items_frame()
         self.items_frame.show_all_items()
 
@@ -132,7 +132,7 @@ class App(ctk.CTk):
                 self.cru_frame,
                 fg_color="#464646",
                 item=item_data,
-                event_handlers={"on_update": self.on_update_event},
+                event_handlers={"on_update": self.refresh, "on_delete": self.refresh},
             )
             view_items_frame.grid(row=0, column=0, sticky="nsew")
         elif isinstance(item_data, NoteItemModel):
@@ -140,7 +140,7 @@ class App(ctk.CTk):
                 self.cru_frame,
                 fg_color="#464646",
                 item=item_data,
-                event_handlers={"on_update": self.on_update_event},
+                event_handlers={"on_update": self.refresh, "on_delete": self.refresh},
             )
             note_details_frame.grid(row=0, column=0, sticky="nsew")
         self.cru_frame.grid_propagate(False)
