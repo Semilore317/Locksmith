@@ -86,22 +86,26 @@ class ViewCredentialsDetailsFrame(ctk.CTkFrame):
             command=self.update_login_credentials,
         )
 
-        self.delete_btn = Button(
+        self.delete_btn = ctk.CTkButton(
             self.login_form_frame,
             text="Move to Bin",
             corner_radius=2,
             font=ctk.CTkFont(family="Inter", size=16),
             height=45,
+            fg_color="#761E1E",
+            hover_color="#631A1A",
             command=self.move_to_bin,
         )
 
         if self.item.is_in_bin:
-            self.delete_btn = Button(
+            self.delete_btn = ctk.CTkButton(
                 self.login_form_frame,
                 text="Delete Permanently",
                 corner_radius=2,
                 font=ctk.CTkFont(family="Inter", size=16),
                 height=45,
+                fg_color="#761E1E",
+                hover_color="#631A1A",
                 command=self.delete_permanently,
             )
 
