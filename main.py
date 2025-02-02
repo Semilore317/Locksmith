@@ -121,9 +121,14 @@ class App(ctk.CTk):
                 self.body_frame, fg_color="#464646", item=item_data
             )
         elif isinstance(item_data, NoteItemModel):
-            self.cru_frame = ViewNoteDetailsFrame(
-                self.body_frame, fg_color="#464646", item=item_data
+            # Odd fix for a weird resizing bug
+            self.test_frame = ctk.CTkFrame(self.body_frame)
+            self.test_frame.grid_columnconfigure(0, weight=1)
+            note_details_frame = ViewNoteDetailsFrame(
+                self.test_frame, fg_color="#464646", item=item_data
             )
+            note_details_frame.grid(row=0, column=0, sticky="nsew")
+            self.cru_frame = self.test_frame
         self.cru_frame.grid_propagate(False)
         self.cru_frame.grid(row=0, column=2, sticky="nsew")
 
