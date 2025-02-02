@@ -121,16 +121,26 @@ class App(ctk.CTk):
             padx=8,
         )
 
+    def on_update_event(self):
+        self.show_add_items_frame()
+        self.items_frame.show_all_items()
+
     def view_item_details(self, item_data):
         self.cru_frame.grid_remove()
         if isinstance(item_data, LoginItemModel):
             view_items_frame = ViewCredentialsDetailsFrame(
-                self.cru_frame, fg_color="#464646", item=item_data
+                self.cru_frame,
+                fg_color="#464646",
+                item=item_data,
+                event_handlers={"on_update": self.on_update_event},
             )
             view_items_frame.grid(row=0, column=0, sticky="nsew")
         elif isinstance(item_data, NoteItemModel):
             note_details_frame = ViewNoteDetailsFrame(
-                self.cru_frame, fg_color="#464646", item=item_data
+                self.cru_frame,
+                fg_color="#464646",
+                item=item_data,
+                event_handlers={"on_update": self.on_update_event},
             )
             note_details_frame.grid(row=0, column=0, sticky="nsew")
         self.cru_frame.grid_propagate(False)

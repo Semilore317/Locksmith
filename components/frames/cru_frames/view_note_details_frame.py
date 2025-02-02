@@ -1,15 +1,18 @@
 import customtkinter as ctk
 
 from backend.models import NoteItemModel
+from backend.storage import update_item
 from components.buttons.button import Button
 from components.frames.cru_frames.components.input_field import InputField
 from components.frames.cru_frames.components.textbox_field import TextboxField
 
 
 class ViewNoteDetailsFrame(ctk.CTkFrame):
-    def __init__(self, master, item: NoteItemModel, **kwargs):
+    def __init__(self, master, item: NoteItemModel, event_handlers, **kwargs):
         super().__init__(master, **kwargs)
 
+        self.item = item
+        self.on_update_event = event_handlers["on_update"]
         note_item_data = item.get_decrypted_data()
         self.form_data = {
             "note": {
@@ -80,8 +83,16 @@ class ViewNoteDetailsFrame(ctk.CTkFrame):
         edit_note_button.grid(row=5, column=0, sticky="ew", padx=6, pady=(0, 6))
         softdelete_note_button.grid(row=6, column=0, sticky="ew", padx=6, pady=(0, 6))
 
+    def __notify_about_errors(self, message):
+        self.note_form_error_label.configure(text=message)
+        self.after(3000, lambda: self.note_form_error_label.configure(text=""))
+
     def update_note(self):
-        print("Updating Login Credentials")
+        print("Updating Note")
 
     def move_to_bin(self):
-        print("Moving to bin")
+        try:
+            update_item(self.item.id, {"is_in_bin": True})
+            self.on_update_event()
+        except Exception as e:
+            self.__notify_about_errors(f"Failed to move item to bin: {e}")
