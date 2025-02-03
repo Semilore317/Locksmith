@@ -5,7 +5,7 @@ from components.frames.items_frames.components.login_item import LoginItem
 from components.frames.items_frames.components.note_item import NoteItem
 
 
-# This frame shows all items (passwords, secure notes, etc.)
+# This frame shows all items (login credentials, secure notes, etc.)
 class AllItemsFrame(ctk.CTkFrame):
     def __init__(self, master, controllers, **kwargs):
         super().__init__(master, **kwargs)

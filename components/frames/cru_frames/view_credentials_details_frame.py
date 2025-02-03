@@ -98,6 +98,15 @@ class ViewCredentialsDetailsFrame(ctk.CTkFrame):
             command=self.move_to_bin,
         )
 
+        self.remove_from_bin_btn = Button(
+            self.login_form_frame,
+            text="Remove from Bin",
+            corner_radius=2,
+            font=ctk.CTkFont(family="Inter", size=16),
+            height=45,
+            command=self.remove_from_bin,
+        )
+
         if self.item.is_in_bin:
             self.delete_btn = ctk.CTkButton(
                 self.login_form_frame,
@@ -121,7 +130,13 @@ class ViewCredentialsDetailsFrame(ctk.CTkFrame):
         show_password_switch.grid(row=3, column=0, sticky="w", padx=6)
         self.login_form_error_label.grid(row=4, column=0, sticky="w", padx=6)
         edit_credentials_button.grid(row=5, column=0, sticky="ew", padx=6, pady=(0, 6))
-        self.delete_btn.grid(row=6, column=0, sticky="ew", padx=6, pady=(0, 6))
+        if self.item.is_in_bin:
+            self.remove_from_bin_btn.grid(
+                row=6, column=0, sticky="ew", padx=6, pady=(0, 6)
+            )
+            self.delete_btn.grid(row=7, column=0, sticky="ew", padx=6, pady=(0, 6))
+        else:
+            self.delete_btn.grid(row=6, column=0, sticky="ew", padx=6, pady=(0, 6))
 
     def __notify_about_errors(self, message):
         self.login_form_error_label.configure(text=message)
@@ -133,6 +148,13 @@ class ViewCredentialsDetailsFrame(ctk.CTkFrame):
             self.on_update_event()
         except Exception as e:
             self.__notify_about_errors(f"Failed to move item to bin: {e}")
+
+    def remove_from_bin(self):
+        try:
+            update_item(self.item.id, {"is_in_bin": False})
+            self.on_update_event()
+        except Exception as e:
+            self.__notify_about_errors(f"Failed to remove item from bin: {e}")
 
     def delete_permanently(self):
         try:

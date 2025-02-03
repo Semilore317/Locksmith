@@ -1,8 +1,10 @@
 import customtkinter as ctk
+from backend.models import LoginItemModel, NoteItemModel
 from components.frames.items_frames.all_items_frame import AllItemsFrame
 from components.frames.items_frames.bin_items_frame import BinItemsFrame
 from components.frames.items_frames.logins_frame import LoginItemsFrame
 from components.frames.items_frames.notes_frame import NoteItemsFrame
+from components.frames.items_frames.search_results_frame import SearchResultsFrame
 
 
 class ItemsFrame(ctk.CTkScrollableFrame):
@@ -21,10 +23,10 @@ class ItemsFrame(ctk.CTkScrollableFrame):
         )
         self.current_frame.grid(row=0, column=0, sticky="nsew", padx=6, pady=6)
 
-    def __switch_frame(self, frame: ctk.CTkFrame):
+    def __switch_frame(self, frame: ctk.CTkFrame, **kwargs):
         self.current_frame.destroy()
         self.current_frame = frame(
-            self, fg_color="transparent", controllers=self.controllers
+            self, fg_color="transparent", controllers=self.controllers, **kwargs
         )
         self.current_frame.grid(row=0, column=0, sticky="nsew", padx=6, pady=6)
 
@@ -40,3 +42,6 @@ class ItemsFrame(ctk.CTkScrollableFrame):
 
     def show_secure_notes(self):
         self.__switch_frame(NoteItemsFrame)
+
+    def show_search_results(self, results: list[LoginItemModel | NoteItemModel]):
+        self.__switch_frame(SearchResultsFrame, search_results=results)

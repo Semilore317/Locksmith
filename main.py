@@ -40,10 +40,6 @@ class App(ctk.CTk):
         except Exception as e:
             print(f"Error loading icon: {e}")
 
-        # Header
-        self.header_frame = HeaderFrame(self)
-        self.header_frame.grid(row=0, column=0, sticky="ew")
-
         # Body
         self.body_frame = ctk.CTkFrame(self, border_width=2)
         # Body grid configuration
@@ -58,6 +54,16 @@ class App(ctk.CTk):
             controllers={"view_item_details": self.view_item_details},
         )
         self.items_frame.grid(row=0, column=1, sticky="nsew")
+
+        # Header with search field
+        self.header_frame = HeaderFrame(
+            self,
+            event_handlers={"on_search": self.items_frame.show_search_results},
+            controllers={
+                "show_all_items": self.items_frame.show_all_items,
+            },
+        )
+        self.header_frame.grid(row=0, column=0, sticky="ew")
 
         # CRU (Create, Read, Update) Frame
         self.cru_frame = ctk.CTkFrame(self.body_frame, fg_color="#464646")

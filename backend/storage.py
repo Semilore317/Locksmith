@@ -43,13 +43,6 @@ def load_data():
 
 
 # Save login credentials and notes to JSON file
-"""
-Load saved login credentials and notes from JSON file.
-Parse them and add new item to the parsed list
-Save the list back to the JSON file.
-"""
-
-
 def save_item(data: LoginItemModel | NoteItemModel):
     # Check if the data is a valid LoginItemModel or NoteItemModel object
     if not isinstance(data, (LoginItemModel, NoteItemModel)):
@@ -99,9 +92,9 @@ def delete_permanently(id: str):
     return True
 
 
-def search_items(keyword):
-    """Search for login credentials or notes across multiple fields."""
-    data = load_data()
+# Search for login credentials or notes across multiple fields
+def search_items(keyword: str):
+    data = get_all_items()
     keyword = keyword.lower()
 
     results = []
