@@ -45,3 +45,4 @@ class ItemsFrame(ctk.CTkScrollableFrame):
 
     def show_search_results(self, results: list[LoginItemModel | NoteItemModel]):
         self.__switch_frame(SearchResultsFrame, search_results=results)
+
