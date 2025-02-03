@@ -1,13 +1,18 @@
 import customtkinter as ctk
-from backend.models import LoginItemModel
+from backend.models import LoginItemModel, NoteItemModel
 from backend.storage import get_items_by_bin_status
 from components.frames.items_frames.components.login_item import LoginItem
 from components.frames.items_frames.components.note_item import NoteItem
 
 
-# This frame shows all items (login credentials, secure notes, etc.)
-class AllItemsFrame(ctk.CTkFrame):
-    def __init__(self, master, controllers, **kwargs):
+class SearchResultsFrame(ctk.CTkFrame):
+    def __init__(
+        self,
+        master,
+        controllers,
+        search_results: list[LoginItemModel | NoteItemModel],
+        **kwargs
+    ):
         super().__init__(master, **kwargs)
 
         self.controllers = controllers
@@ -17,15 +22,13 @@ class AllItemsFrame(ctk.CTkFrame):
         # UI Components
         title_label = ctk.CTkLabel(
             self,
-            text="ALL ITEMS",
+            text="SEARCH RESULTS",
             font=ctk.CTkFont(family="Arial", size=16, weight="bold"),
         )
         title_label.grid(row=0, column=0, sticky="ew")
 
-        # Retrieve items and display them sorted by their time of creation - descending order
-        all_items = get_items_by_bin_status(False)
-        if len(all_items) > 0:
-            for item in all_items:
+        if len(search_results) > 0:
+            for item in search_results:
                 if isinstance(item, LoginItemModel):
                     # Display login items
                     login_item = LoginItem(
@@ -42,13 +45,13 @@ class AllItemsFrame(ctk.CTkFrame):
             # If no items have been created, display a message saying so
             no_items_label = ctk.CTkLabel(
                 self,
-                text="NO ITEMS",
+                text="NO ITEM",
                 font=ctk.CTkFont(family="Arial", size=36, weight="bold"),
             )
             no_items_label.grid(row=1, column=0, sticky="ew", pady=(240, 0))
             desc_label = ctk.CTkLabel(
                 self,
-                text="You haven't saved any note or login credential",
+                text="Couldn't find any item with the specified keyword",
                 font=ctk.CTkFont(family="Arial", size=16),
             )
             desc_label.grid(row=2, column=0, sticky="ew", pady=(10, 0))
