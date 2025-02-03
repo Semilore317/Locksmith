@@ -18,6 +18,7 @@ class BinItemsFrame(ctk.CTkFrame):
         title_label = ctk.CTkLabel(
             self,
             text="BIN",
+            text_color="#FF0000",
             font=ctk.CTkFont(family="Arial", size=16, weight="bold"),
         )
         title_label.grid(row=0, column=0, sticky="ew")
