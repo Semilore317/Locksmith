@@ -1,5 +1,6 @@
 # Locksmith 
-A simple password manager app built with Tkinter
+Locksmith is a simple desktop application built with Python and Tkinter([customtkinter](https://customtkinter.tomschimansky.com/)) for managing login credentials and secure notes.  
+This is my 1st year 2nd Semester project for CSC 103 (Introduction to Programming)
 
 ![image](https://github.com/user-attachments/assets/d8f3d6c2-ba8d-4786-a60d-58d82cb343b1)
 
