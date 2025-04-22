@@ -1,12 +1,16 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+from PyInstaller.utils.hooks import collect_submodules
+
+# Collect all submodules of Pillow, including the necessary tkinter submodule
+hiddenimports = collect_submodules('PIL')
 
 a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
     datas=[('appdata/data.json', 'appdata'), ('assets/app_icon.png', 'assets')],
-    hiddenimports=[],
+    hiddenimports=hiddenimports,  # Add the hidden imports for PIL
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
