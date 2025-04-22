@@ -2,21 +2,30 @@ from tkinter import PhotoImage
 import customtkinter as ctk
 from backend.models import LoginItemModel, NoteItemModel
 from components.frames.cru_frames.add_items_frame import AddItemsFrame
-from components.frames.cru_frames.edit_credentials_details_frame import (
-    EditCredentialsDetailsFrame,
-)
+from components.frames.cru_frames.edit_credentials_details_frame import EditCredentialsDetailsFrame
 from components.frames.cru_frames.edit_note_details_frame import EditNoteDetailsFrame
-from components.frames.cru_frames.view_credentials_details_frame import (
-    ViewCredentialsDetailsFrame,
-)
+from components.frames.cru_frames.view_credentials_details_frame import ViewCredentialsDetailsFrame
 from components.frames.cru_frames.view_note_details_frame import ViewNoteDetailsFrame
 from components.frames.header_frame import HeaderFrame
 from components.frames.sidebar_frame import SidebarFrame
 from components.frames.items_frame import ItemsFrame
 from PIL import Image
 from backend.storage import init_appdata
+from backend.utils import resource_path
+
+import sys
+import os
 
 ctk.set_appearance_mode("dark")
+
+
+def resource_path(relative_path):
+    """Get the absolute path to the resource (works for dev and for PyInstaller)."""
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 
 class App(ctk.CTk):
@@ -25,27 +34,23 @@ class App(ctk.CTk):
         init_appdata()
 
         self.title("Locksmith Password Manager")
-        # Set a fixed window size since scaling widgets in Tkinter is a pain to handle
         self.geometry("1340x710")
         self.resizable(False, False)
 
-        # Configure grid for resizing
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
         # Set the app's icon
         try:
-            icon = PhotoImage(file="./assets/app_icon.png")
+            icon = PhotoImage(file=resource_path("assets/app_icon.png"))
             self.wm_iconphoto(True, icon)
         except Exception as e:
             print(f"Error loading icon: {e}")
 
         # Body
         self.body_frame = ctk.CTkFrame(self, border_width=2)
-        # Body grid configuration
         self.body_frame.grid_columnconfigure((1, 2), weight=1)
         self.body_frame.grid_rowconfigure(0, weight=1)
-
         self.body_frame.grid(row=1, column=0, sticky="nsew")
 
         # Items Frame
@@ -59,27 +64,17 @@ class App(ctk.CTk):
         self.header_frame = HeaderFrame(
             self,
             event_handlers={"on_search": self.items_frame.show_search_results},
-            controllers={
-                "show_all_items": self.items_frame.show_all_items,
-            },
+            controllers={"show_all_items": self.items_frame.show_all_items},
         )
         self.header_frame.grid(row=0, column=0, sticky="ew")
 
-        # CRU (Create, Read, Update) Frame
+        # CRU Frame
         self.cru_frame = ctk.CTkFrame(self.body_frame, fg_color="#464646")
         self.cru_frame.grid_columnconfigure(0, weight=1)
-
-        add_items_frame = AddItemsFrame(
-            self.cru_frame,
-            fg_color="#464646",
-            event_handlers={
-                "on_save": self.items_frame.show_all_items,
-            },
-        )
-
         self.cru_frame.grid_propagate(False)
-        add_items_frame.grid(row=0, column=0, sticky="nsew")
         self.cru_frame.grid(row=0, column=2, sticky="nsew")
+
+        self.show_add_items_frame()
 
         # Sidebar
         self.sidebar_frame = SidebarFrame(
@@ -97,17 +92,20 @@ class App(ctk.CTk):
 
         # Sidebar - Icon and Title
         icon_and_title_frame = ctk.CTkFrame(self.sidebar_frame, fg_color="transparent")
+        icon_and_title_frame.grid(row=0, column=0, pady=8)
+        icon_and_title_frame.grid_columnconfigure(0, weight=0)
+        icon_and_title_frame.grid_columnconfigure(1, weight=1)
+
         try:
             lock_image = ctk.CTkImage(
-                light_image=Image.open("./assets/app_icon.png"),
-                dark_image=Image.open("./assets/app_icon.png"),
+                light_image=Image.open(resource_path("assets/app_icon.png")),
+                dark_image=Image.open(resource_path("assets/app_icon.png")),
                 size=(48, 48),
             )
         except Exception as e:
             print(f"Error loading lock image: {e}")
             lock_image = None
 
-        # Create image and title labels
         image_label = ctk.CTkLabel(icon_and_title_frame, image=lock_image, text="")
         title = ctk.CTkLabel(
             icon_and_title_frame,
@@ -116,20 +114,8 @@ class App(ctk.CTk):
             font=ctk.CTkFont(family="Arial", size=18, weight="bold"),
         )
 
-        # Layout the frame and ensure the icon and text are in the same row and next to each other
-        icon_and_title_frame.grid(row=0, column=0, pady=8)
-        # Prevent stretching of the columns
-        icon_and_title_frame.grid_columnconfigure(0, weight=0)
-        # Let the text column take remaining space
-        icon_and_title_frame.grid_columnconfigure(1, weight=1)
-
-        # Place image and text next to each other
         image_label.grid(row=0, column=0, padx=8)
-        title.grid(
-            row=0,
-            column=1,
-            padx=8,
-        )
+        title.grid(row=0, column=1, padx=8)
 
     def refresh(self):
         self.show_add_items_frame()
@@ -142,7 +128,7 @@ class App(ctk.CTk):
     def view_item_details(self, item_data):
         self.cru_frame.grid_remove()
         if isinstance(item_data, LoginItemModel):
-            view_items_frame = ViewCredentialsDetailsFrame(
+            view_frame = ViewCredentialsDetailsFrame(
                 self.cru_frame,
                 fg_color="#464646",
                 item=item_data,
@@ -152,9 +138,8 @@ class App(ctk.CTk):
                     "on_edit_btn_clicked": self.show_edit_items_frame,
                 },
             )
-            view_items_frame.grid(row=0, column=0, sticky="nsew")
         elif isinstance(item_data, NoteItemModel):
-            note_details_frame = ViewNoteDetailsFrame(
+            view_frame = ViewNoteDetailsFrame(
                 self.cru_frame,
                 fg_color="#464646",
                 item=item_data,
@@ -164,7 +149,7 @@ class App(ctk.CTk):
                     "on_edit_btn_clicked": self.show_edit_items_frame,
                 },
             )
-            note_details_frame.grid(row=0, column=0, sticky="nsew")
+        view_frame.grid(row=0, column=0, sticky="nsew")
         self.cru_frame.grid_propagate(False)
         self.cru_frame.grid(row=0, column=2, sticky="nsew")
 
@@ -173,18 +158,16 @@ class App(ctk.CTk):
         add_items_frame = AddItemsFrame(
             self.cru_frame,
             fg_color="#464646",
-            event_handlers={
-                "on_save": self.items_frame.show_all_items,
-            },
+            event_handlers={"on_save": self.items_frame.show_all_items},
         )
-        self.cru_frame.grid_propagate(False)
         add_items_frame.grid(row=0, column=0, sticky="nsew")
+        self.cru_frame.grid_propagate(False)
         self.cru_frame.grid(row=0, column=2, sticky="nsew")
 
     def show_edit_items_frame(self, item_data):
         self.cru_frame.grid_remove()
         if isinstance(item_data, LoginItemModel):
-            view_items_frame = EditCredentialsDetailsFrame(
+            edit_frame = EditCredentialsDetailsFrame(
                 self.cru_frame,
                 fg_color="#464646",
                 item=item_data,
@@ -193,9 +176,8 @@ class App(ctk.CTk):
                     "on_cancel": self.view_item_details,
                 },
             )
-            view_items_frame.grid(row=0, column=0, sticky="nsew")
         elif isinstance(item_data, NoteItemModel):
-            note_details_frame = EditNoteDetailsFrame(
+            edit_frame = EditNoteDetailsFrame(
                 self.cru_frame,
                 fg_color="#464646",
                 item=item_data,
@@ -204,10 +186,11 @@ class App(ctk.CTk):
                     "on_cancel": self.view_item_details,
                 },
             )
-            note_details_frame.grid(row=0, column=0, sticky="nsew")
+        edit_frame.grid(row=0, column=0, sticky="nsew")
         self.cru_frame.grid_propagate(False)
         self.cru_frame.grid(row=0, column=2, sticky="nsew")
 
 
-app = App()
-app.mainloop()
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()

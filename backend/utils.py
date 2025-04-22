@@ -2,6 +2,8 @@
 from pyzxcvbn import zxcvbn
 import random
 import string
+import sys
+import os
 
 def check_password_strength(password):
     """
@@ -35,3 +37,14 @@ def generate_password():
     password = "".join(random.choices(all_chars, k=length))
 
     return password
+
+
+# optimization needed for executables
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and PyInstaller. """
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
