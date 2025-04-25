@@ -1,10 +1,21 @@
 import json
 import os
+import platform
 from backend.models import LoginItemModel, NoteItemModel
 from backend.utils import resource_path
 
 # Get the AppData folder path
-APPDATA_PATH = os.path.join(os.environ['APPDATA'], 'Locksmith')
+APP_NAME = "Locksmith"
+
+if platform.system() == "Windows":
+    base_dir = os.environ.get("APPDATA")
+elif platform.system() == "Darwin":  # macOS
+    base_dir = os.path.expanduser("~/Library/Application Support")
+else:  # Linux and other Unix
+    base_dir = os.path.expanduser("~/.config")
+
+APPDATA_PATH = os.path.join(base_dir, APP_NAME)
+os.makedirs(APPDATA_PATH, exist_ok=True)
 
 # Ensure this is at the top level, not inside other functions
 def init_appdata():

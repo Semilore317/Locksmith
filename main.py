@@ -1,5 +1,10 @@
 from tkinter import PhotoImage
+import tkinter as tk
 import customtkinter as ctk
+import sys
+import os
+import platform
+
 from backend.models import LoginItemModel, NoteItemModel
 from components.frames.cru_frames.add_items_frame import AddItemsFrame
 from components.frames.cru_frames.edit_credentials_details_frame import EditCredentialsDetailsFrame
@@ -13,8 +18,6 @@ from PIL import Image
 from backend.storage import init_appdata
 from backend.utils import resource_path
 
-import sys
-import os
 
 ctk.set_appearance_mode("dark")
 
@@ -42,7 +45,11 @@ class App(ctk.CTk):
 
         # Set the app's icon
         try:
-            self.iconbitmap(resource_path("assets/app_icon.ico"))
+            if platform.system() == "Windows":
+                window.iconbitmap(resource_path("assets/app_icon.ico"))
+            else:
+                img = tk.PhotoImage(file=resource_path("assets/app_icon.png"))
+                self.iconphoto(True, img)
         except Exception as e:
             print(f"Error loading icon: {e}")
 
