@@ -1,3 +1,4 @@
 *.pyc
 appdata
-dist
+/dist/
+secret.key
