@@ -3,25 +3,31 @@ import os
 from backend.models import LoginItemModel, NoteItemModel
 from backend.utils import resource_path
 
-DATA_FILE = "appdata/data.json"
+# Get the AppData folder path
+APPDATA_PATH = os.path.join(os.environ['APPDATA'], 'Locksmith')
 
 # Ensure this is at the top level, not inside other functions
 def init_appdata():
-    if not os.path.exists("appdata"):
-        os.makedirs("appdata")
+    if not os.path.exists(APPDATA_PATH):
+        os.makedirs(APPDATA_PATH)
 
-    if not os.path.exists(DATA_FILE):
-        with open(resource_path(DATA_FILE), "w", encoding="utf-8") as file:
+    # Define the path for the data file in AppData
+    data_file = os.path.join(APPDATA_PATH, 'data.json')
+    
+    if not os.path.exists(data_file):
+        with open(data_file, "w", encoding="utf-8") as file:
             json.dump([], file)
 
-
+# Update the file loading and saving to reference AppData
 def load_data():
     """Loads the data from the JSON file."""
     data = []
-    if not os.path.exists(DATA_FILE):
+    data_file = os.path.join(APPDATA_PATH, 'data.json')
+    
+    if not os.path.exists(data_file):
         return data
 
-    with open(resource_path(DATA_FILE), "r", encoding="utf-8") as file:
+    with open(data_file, "r", encoding="utf-8") as file:
         try:
             data = json.load(file)
         except json.JSONDecodeError:
@@ -36,7 +42,6 @@ def load_data():
 
     return objects
 
-
 def save_item(data: LoginItemModel | NoteItemModel):
     """Saves an item (LoginItem or Note) to the data file."""
     if not isinstance(data, (LoginItemModel, NoteItemModel)):
@@ -46,11 +51,11 @@ def save_item(data: LoginItemModel | NoteItemModel):
     duplicated_items = filter(lambda x: x.id == data.id, latest_data)
     if len(list(duplicated_items)) == 0:
         latest_data.append(data)
-        with open(resource_path(DATA_FILE), "w", encoding="utf-8") as file:
+        data_file = os.path.join(APPDATA_PATH, 'data.json')
+        with open(data_file, "w", encoding="utf-8") as file:
             json.dump([item.get_raw_data() for item in latest_data], file, indent=4)
     else:
         print("Item already exists")
-
 
 def update_item(id: str, new_data):
     """Updates an item in the data file."""
@@ -62,11 +67,11 @@ def update_item(id: str, new_data):
                 if hasattr(item, key):
                     setattr(item, key, value)
             all_items[i] = item
-            with open(resource_path(DATA_FILE), "w", encoding="utf-8") as file:
+            data_file = os.path.join(APPDATA_PATH, 'data.json')
+            with open(data_file, "w", encoding="utf-8") as file:
                 json.dump([item.get_raw_data() for item in all_items], file, indent=4)
             return item
     raise Exception("Item with specified ID not found")
-
 
 def delete_permanently(id: str):
     """Completely removes an item from the JSON file."""
@@ -75,10 +80,10 @@ def delete_permanently(id: str):
     new_items = [item for item in all_items if str(item.id) != item_id]
     if len(all_items) == len(new_items):
         raise Exception("No item was deleted (ID not found)")
-    with open(resource_path(DATA_FILE), "w", encoding="utf-8") as file:
+    data_file = os.path.join(APPDATA_PATH, 'data.json')
+    with open(data_file, "w", encoding="utf-8") as file:
         json.dump([item.get_raw_data() for item in new_items], file, indent=4)
     return True
-
 
 def search_items(keyword: str):
     """Searches for items by keyword."""
@@ -96,13 +101,11 @@ def search_items(keyword: str):
 
     return results
 
-
 def get_all_items():
     """Returns all items sorted by creation date."""
     data = load_data()
     sorted_data = sorted(data, key=lambda x: x.created_at, reverse=True)
     return sorted_data
-
 
 def get_items_by_type(item_type):
     """Filters items by type."""
@@ -112,7 +115,6 @@ def get_items_by_type(item_type):
     elif item_type == "note":
         return [item for item in data if isinstance(item, NoteItemModel)]
     return []
-
 
 def get_items_by_bin_status(in_bin=True):
     """Filters items based on bin status."""
