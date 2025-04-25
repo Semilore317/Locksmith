@@ -42,10 +42,10 @@ class App(ctk.CTk):
 
         # Set the app's icon
         try:
-            icon = PhotoImage(file=resource_path("assets/app_icon.png"))
-            self.wm_iconphoto(True, icon)
+            self.iconbitmap(resource_path("assets/app_icon.ico"))
         except Exception as e:
             print(f"Error loading icon: {e}")
+
 
         # Body
         self.body_frame = ctk.CTkFrame(self, border_width=2)
