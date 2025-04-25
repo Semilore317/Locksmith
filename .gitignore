@@ -2,3 +2,6 @@
 appdata
 /dist/
 secret.key
+*deb
+*.pkg.tar.zst
+*.rpm
