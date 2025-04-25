@@ -1,5 +1,3 @@
-# backend/storage.py
-
 import json
 import os
 from backend.models import LoginItemModel, NoteItemModel
