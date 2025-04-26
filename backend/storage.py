@@ -124,7 +124,7 @@ def get_items_by_type(item_type):
     if item_type == "login":
         return [item for item in data if isinstance(item, LoginItemModel)]
     elif item_type == "note":
-        return [item for item in data if isinstance(item, NoteItemModel)]
+        return [item for item in data if isinstance(item, NoteItemModel)]# 🔐 Locksmith v1.0 (Linux)
     return []
 
 def get_items_by_bin_status(in_bin=True):
