@@ -1,69 +1,76 @@
 import json
 import os
+import platform
 from backend.models import LoginItemModel, NoteItemModel
+from backend.utils import resource_path
 
-DATA_FILE = "appdata/data.json"
+# Get the AppData folder path
+APP_NAME = "Locksmith"
 
+if platform.system() == "Windows":
+    base_dir = os.environ.get("APPDATA")
+elif platform.system() == "Darwin":  # macOS
+    base_dir = os.path.expanduser("~/Library/Application Support")
+else:  # Linux and other Unix
+    base_dir = os.path.expanduser("~/.config")
 
+APPDATA_PATH = os.path.join(base_dir, APP_NAME)
+os.makedirs(APPDATA_PATH, exist_ok=True)
+
+# Ensure this is at the top level, not inside other functions
 def init_appdata():
-    if not os.path.exists("appdata"):
-        os.makedirs("appdata")
+    if not os.path.exists(APPDATA_PATH):
+        os.makedirs(APPDATA_PATH)
 
-    if not os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "w") as file:
+    # Define the path for the data file in AppData
+    data_file = os.path.join(APPDATA_PATH, 'data.json')
+    
+    if not os.path.exists(data_file):
+        with open(data_file, "w", encoding="utf-8") as file:
             json.dump([], file)
 
-
-# Load saved login credentials and notes from JSON file
+# Update the file loading and saving to reference AppData
 def load_data():
-    data: list[LoginItemModel | NoteItemModel] = []
-
-    # Return empty list if file doesn't exist
-    if not os.path.exists(DATA_FILE):
+    """Loads the data from the JSON file."""
+    data = []
+    data_file = os.path.join(APPDATA_PATH, 'data.json')
+    
+    if not os.path.exists(data_file):
         return data
 
-    with open(DATA_FILE, "r") as file:
+    with open(data_file, "r", encoding="utf-8") as file:
         try:
             data = json.load(file)
         except json.JSONDecodeError:
-            # Return empty list if file is corrupted
             return []
 
-    # Convert JSON data to objects while preserving IDs
     objects = []
     for item in data:
-        is_login_item = "username" in item
-        if is_login_item:
+        if "username" in item:
             objects.append(LoginItemModel(**item))
         else:
             objects.append(NoteItemModel(**item))
 
-    # Return list of `LoginItemModel` and `NoteItemModel` objects
     return objects
 
-
-# Save login credentials and notes to JSON file
 def save_item(data: LoginItemModel | NoteItemModel):
-    # Check if the data is a valid LoginItemModel or NoteItemModel object
+    """Saves an item (LoginItem or Note) to the data file."""
     if not isinstance(data, (LoginItemModel, NoteItemModel)):
-        raise Exception(
-            "Invalid data passed. Must be a LoginItemModel or NoteItemModel object"
-        )
+        raise Exception("Invalid data passed. Must be a LoginItemModel or NoteItemModel object")
 
     latest_data = load_data()
-    # Prevent adding duplicate items
     duplicated_items = filter(lambda x: x.id == data.id, latest_data)
     if len(list(duplicated_items)) == 0:
         latest_data.append(data)
-        with open(DATA_FILE, "w", encoding="utf-8") as file:
+        data_file = os.path.join(APPDATA_PATH, 'data.json')
+        with open(data_file, "w", encoding="utf-8") as file:
             json.dump([item.get_raw_data() for item in latest_data], file, indent=4)
     else:
         print("Item already exists")
 
-
 def update_item(id: str, new_data):
+    """Updates an item in the data file."""
     all_items = get_all_items()
-    # Update only provided fields
     for i in range(len(all_items)):
         item = all_items[i]
         if item.id == id:
@@ -71,29 +78,26 @@ def update_item(id: str, new_data):
                 if hasattr(item, key):
                     setattr(item, key, value)
             all_items[i] = item
-            with open(DATA_FILE, "w", encoding="utf-8") as file:
+            data_file = os.path.join(APPDATA_PATH, 'data.json')
+            with open(data_file, "w", encoding="utf-8") as file:
                 json.dump([item.get_raw_data() for item in all_items], file, indent=4)
             return item
     raise Exception("Item with specified ID not found")
 
-
-# Completely remove an item from the JSON file
 def delete_permanently(id: str):
+    """Completely removes an item from the JSON file."""
     all_items = get_all_items()
-
-    # Ensure IDs are strings for correct comparison
     item_id = str(id)
-
     new_items = [item for item in all_items if str(item.id) != item_id]
     if len(all_items) == len(new_items):
         raise Exception("No item was deleted (ID not found)")
-    with open(DATA_FILE, "w", encoding="utf-8") as file:
+    data_file = os.path.join(APPDATA_PATH, 'data.json')
+    with open(data_file, "w", encoding="utf-8") as file:
         json.dump([item.get_raw_data() for item in new_items], file, indent=4)
     return True
 
-
-# Search for login credentials or notes across multiple fields
 def search_items(keyword: str):
+    """Searches for items by keyword."""
     data = get_all_items()
     keyword = keyword.lower()
 
@@ -108,27 +112,22 @@ def search_items(keyword: str):
 
     return results
 
-
-# Return all the logins and notes in chronological order
 def get_all_items():
+    """Returns all items sorted by creation date."""
     data = load_data()
-
-    # Sort by created_at timestamp in descending order
     sorted_data = sorted(data, key=lambda x: x.created_at, reverse=True)
     return sorted_data
 
-
-# Filter items by type (LoginItemModel or NoteItemModel)
 def get_items_by_type(item_type):
+    """Filters items by type."""
     data = get_all_items()
     if item_type == "login":
         return [item for item in data if isinstance(item, LoginItemModel)]
     elif item_type == "note":
-        return [item for item in data if isinstance(item, NoteItemModel)]
-    return []  # Return empty list if type is invalid
+        return [item for item in data if isinstance(item, NoteItemModel)]# 🔐 Locksmith v1.0 (Linux)
+    return []
 
-
-# Filter items based on whether they are in the bin or not
 def get_items_by_bin_status(in_bin=True):
+    """Filters items based on bin status."""
     all_items = get_all_items()
     return [item for item in all_items if item.is_in_bin == in_bin]
