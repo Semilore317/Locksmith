@@ -1,0 +1,8 @@
+cryptography==38.0.4
+customtkinter==5.2.2
+Pillow==11.2.1
+pyzxcvbn==0.8.0
+
+
+
+
